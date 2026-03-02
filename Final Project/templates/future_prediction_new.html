@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Future Prediction{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="card-custom p-4 text-center" style="background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%); color: white;">
+                <h3><i class="bi bi-graph-up-arrow"></i> Future Crime Hotspot Prediction</h3>
+                <p class="mb-0">Uses Linear Regression to forecast crime rates for future years</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-lg-6 mx-auto">
+            <div class="card-custom p-4">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Select Target Year:</label>
+                        <select name="target_year" class="form-select form-select-lg">
+                            {% for year in range(2021, 2031) %}
+                            <option value="{{ year }}" {% if target_year == year %}selected{% endif %}>{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-gradient btn-lg w-100"><i class="bi bi-crystal-ball"></i> Predict Future Hotspots</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    {% if chart_url %}
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-12">
+            <div class="card-custom p-4">
+                <h4 class="mb-3"><i class="bi bi-bar-chart-fill"></i> Top 10 Predicted Hotspots for {{ target_year }}</h4>
+                <img src="data:image/png;base64,{{ chart_url }}" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if predictions %}
+    <div class="row" data-aos="fade-up">
+        <div class="col-12">
+            <div class="card-custom p-4">
+                <h4 class="mb-3"><i class="bi bi-table"></i> Detailed Predictions for {{ target_year }}</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover table-custom">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>State/UT</th>
+                                <th>Predicted Crimes</th>
+                                <th>Trend</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pred in predictions %}
+                            <tr>
+                                <td><strong>{{ loop.index }}</strong></td>
+                                <td>{{ pred.state }}</td>
+                                <td>{{ pred.predicted_crimes }}</td>
+                                <td><span class="{% if pred.trend == 'Increasing' %}text-danger{% else %}text-success{% endif %}">{{ pred.trend }} {% if pred.trend == 'Increasing' %}📈{% else %}📉{% endif %}</span></td>
+                                <td><span class="badge {% if pred.status == 'HOTSPOT' %}bg-danger{% else %}bg-success{% endif %}">{{ pred.status }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

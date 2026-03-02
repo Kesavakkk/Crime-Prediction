@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Heatmap</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .navbar h1 { color: #667eea; font-size: 24px; }
+        .navbar a {
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .info-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .info-box h3 { color: #333; margin-bottom: 10px; }
+        .legend {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        .map-container {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            height: calc(100vh - 250px);
+            min-height: 500px;
+            position: relative;
+        }
+        .map-container iframe, .map-container #heatmap {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 5px;
+        }
+        .layer-control { position: absolute; top: 20px; right: 20px; z-index: 1000; background: white; padding: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .layer-control button { display: block; width: 100%; padding: 8px; margin: 3px 0; border: none; border-radius: 3px; cursor: pointer; background: #667eea; color: white; font-size: 12px; }
+        .layer-control button.active { background: #28a745; }
+        .search-box { position: absolute; top: 20px; left: 20px; z-index: 1000; background: white; padding: 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .search-box input { padding: 6px; border: 1px solid #ddd; border-radius: 3px; width: 200px; }
+        .directions-panel { position: absolute; bottom: 20px; left: 20px; z-index: 1000; background: white; padding: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); max-width: 300px; max-height: 200px; overflow-y: auto; display: none; }
+        .directions-panel h4 { margin: 0 0 8px 0; font-size: 14px; }
+        .directions-panel .step { font-size: 12px; padding: 4px 0; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🗺️ Crime Heatmap - Tamil Nadu</h1>
+        <a href="/userhome">Back to Home</a>
+    </div>
+    
+    <div class="container">
+        <div class="info-box">
+            <h3>Interactive Crime Heatmap</h3>
+            <p style="color:#666; margin-bottom:10px;">Tamil Nadu district-wise crime heatmap. Click markers for details and directions.</p>
+            <div class="legend">
+                <strong>Legend:</strong>
+                <div class="legend-item">
+                    <div class="legend-color" style="background:red;"></div>
+                    <span>High Crime (Hotspot)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background:orange;"></div>
+                    <span>Medium Crime</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background:green;"></div>
+                    <span>Low Crime (Safe Zone)</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="map-container">
+            <div id="heatmap"></div>
+            <div class="layer-control">
+                <button id="streetBtn" class="active" onclick="switchLayer('street')">🗺️ Street</button>
+                <button id="satelliteBtn" onclick="switchLayer('satellite')">🛰️ Satellite</button>
+                <button id="terrainBtn" onclick="switchLayer('terrain')">⛰️ Terrain</button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" list="districtList" placeholder="Search district..." onchange="searchLocation()">
+                <datalist id="districtList"></datalist>
+            </div>
+            <div class="directions-panel" id="directionsPanel"></div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <script>
+        const map = L.map('heatmap').setView([11.1271, 78.6569], 7);
+        
+        const layers = {
+            street: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }),
+            satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '© Esri' }),
+            terrain: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { attribution: '© OpenTopoMap' })
+        };
+        
+        let currentLayer = layers.street.addTo(map);
+        let markers = {};
+        let routingControl = null;
+        
+        const cities = [
+            {name: 'Chennai', lat: 13.0827, lng: 80.2707, crimes: 8500},
+            {name: 'Coimbatore', lat: 11.0168, lng: 76.9558, crimes: 4200},
+            {name: 'Madurai', lat: 9.9252, lng: 78.1198, crimes: 3800},
+            {name: 'Salem', lat: 11.6643, lng: 78.1460, crimes: 2800},
+            {name: 'Tiruchirappalli', lat: 10.7905, lng: 78.7047, crimes: 2100},
+            {name: 'Tirunelveli', lat: 8.7139, lng: 77.7567, crimes: 1900},
+            {name: 'Tiruppur', lat: 11.1085, lng: 77.3411, crimes: 1600},
+            {name: 'Erode', lat: 11.3410, lng: 77.7172, crimes: 1800},
+            {name: 'Vellore', lat: 12.9165, lng: 79.1325, crimes: 1700},
+            {name: 'Thoothukudi', lat: 8.7642, lng: 78.1348, crimes: 1500},
+            {name: 'Dindigul', lat: 10.3673, lng: 77.9803, crimes: 1400},
+            {name: 'Thanjavur', lat: 10.7870, lng: 79.1378, crimes: 1300},
+            {name: 'Ranipet', lat: 12.9249, lng: 79.3308, crimes: 1200},
+            {name: 'Sivaganga', lat: 9.8433, lng: 78.4809, crimes: 1100},
+            {name: 'Karur', lat: 10.9601, lng: 78.0766, crimes: 1000},
+            {name: 'Virudhunagar', lat: 9.5810, lng: 77.9624, crimes: 950},
+            {name: 'Tiruvannamalai', lat: 12.2253, lng: 79.0747, crimes: 900},
+            {name: 'Kanchipuram', lat: 12.8342, lng: 79.7036, crimes: 850},
+            {name: 'Cuddalore', lat: 11.7480, lng: 79.7714, crimes: 800},
+            {name: 'Namakkal', lat: 11.2189, lng: 78.1677, crimes: 750},
+            {name: 'Krishnagiri', lat: 12.5186, lng: 78.2137, crimes: 700},
+            {name: 'Dharmapuri', lat: 12.1211, lng: 78.1582, crimes: 650},
+            {name: 'Pudukkottai', lat: 10.3833, lng: 78.8000, crimes: 600},
+            {name: 'Ramanathapuram', lat: 9.3639, lng: 78.8370, crimes: 550},
+            {name: 'Nagapattinam', lat: 10.7672, lng: 79.8449, crimes: 500},
+            {name: 'Villupuram', lat: 11.9401, lng: 79.4861, crimes: 480},
+            {name: 'Theni', lat: 10.0104, lng: 77.4977, crimes: 450},
+            {name: 'Tirupattur', lat: 12.4961, lng: 78.5719, crimes: 420},
+            {name: 'The Nilgiris', lat: 11.4102, lng: 76.6950, crimes: 400},
+            {name: 'Tenkasi', lat: 8.9579, lng: 77.3152, crimes: 380},
+            {name: 'Ariyalur', lat: 11.1401, lng: 79.0782, crimes: 350},
+            {name: 'Perambalur', lat: 11.2324, lng: 78.8798, crimes: 320},
+            {name: 'Kallakurichi', lat: 11.7401, lng: 78.9597, crimes: 300},
+            {name: 'Chengalpattu', lat: 12.6819, lng: 79.9760, crimes: 260},
+            {name: 'Mayiladuthurai', lat: 11.1025, lng: 79.6542, crimes: 240},
+            {name: 'Kanyakumari', lat: 8.0883, lng: 77.5385, crimes: 220},
+            {name: 'Tiruvallur', lat: 13.1439, lng: 79.9093, crimes: 200},
+            {name: 'Tiruvarur', lat: 10.7729, lng: 79.6345, crimes: 180}
+        ];
+        
+        const datalist = document.getElementById('districtList');
+        cities.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city.name;
+            datalist.appendChild(option);
+        });
+        
+        const heatData = [];
+        cities.forEach(city => {
+            for (let i = 0; i < city.crimes / 100; i++) {
+                heatData.push([
+                    city.lat + (Math.random() - 0.5) * 0.5,
+                    city.lng + (Math.random() - 0.5) * 0.5,
+                    0.5
+                ]);
+            }
+            const marker = L.circleMarker([city.lat, city.lng], {
+                radius: 8,
+                fillColor: city.crimes > 3000 ? '#dc3545' : city.crimes > 1000 ? '#ffc107' : '#28a745',
+                color: '#fff',
+                weight: 2,
+                fillOpacity: 0.8
+            }).bindPopup(`<b>${city.name}</b><br>Crimes: ${city.crimes}<br><button onclick="getDirections([11.1271, 78.6569], [${city.lat}, ${city.lng}])">Get Directions</button>`).addTo(map);
+            markers[city.name.toLowerCase()] = marker;
+        });
+        
+        L.heatLayer(heatData, {
+            radius: 25,
+            blur: 15,
+            maxZoom: 10,
+            gradient: {0.4: 'blue', 0.6: 'yellow', 0.8: 'orange', 1.0: 'red'}
+        }).addTo(map);
+        
+        function switchLayer(type) {
+            map.removeLayer(currentLayer);
+            currentLayer = layers[type].addTo(map);
+            document.querySelectorAll('.layer-control button').forEach(b => b.classList.remove('active'));
+            document.getElementById(type + 'Btn').classList.add('active');
+        }
+        
+        function searchLocation() {
+            const query = document.getElementById('searchInput').value;
+            for (const [city, marker] of Object.entries(markers)) {
+                if (city === query.toLowerCase()) {
+                    marker.openPopup();
+                    map.setView(marker.getLatLng(), 10);
+                    break;
+                }
+            }
+        }
+        
+        function getDirections(start, end) {
+            if (routingControl) map.removeControl(routingControl);
+            
+            routingControl = L.Routing.control({
+                waypoints: [L.latLng(start), L.latLng(end)],
+                routeWhileDragging: false,
+                show: false,
+                createMarker: () => null
+            }).on('routesfound', function(e) {
+                const route = e.routes[0];
+                const panel = document.getElementById('directionsPanel');
+                panel.innerHTML = `<h4>📍 Directions (${(route.summary.totalDistance/1000).toFixed(1)} km, ${Math.round(route.summary.totalTime/60)} min)</h4>`;
+                route.instructions.forEach((instr, i) => {
+                    panel.innerHTML += `<div class="step">${i+1}. ${instr.text} (${(instr.distance/1000).toFixed(1)} km)</div>`;
+                });
+                panel.style.display = 'block';
+            }).addTo(map);
+        }
+    </script>
+</body>
+</html>

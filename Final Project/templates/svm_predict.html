@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVM Crime Prediction</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .navbar h1 { color: #667eea; font-size: 24px; }
+        .navbar a {
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card h2 { color: #333; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .btn-predict {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-predict:hover { transform: translateY(-2px); }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .result.hotspot {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        .result.safe {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        .result h3 { font-size: 28px; margin-bottom: 10px; }
+        .result p { font-size: 16px; }
+        .crime-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .info-box {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        .states-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .states-list ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 5px;
+        }
+        .states-list li {
+            padding: 5px;
+            font-size: 13px;
+            color: #333;
+        }
+        .crime-data-table {
+            margin-top: 15px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .crime-data-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .crime-data-table td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        .crime-data-table td:first-child {
+            font-weight: 600;
+            color: #667eea;
+        }
+    </style>
+    <script>
+        function fillExample() {
+            const examples = {
+                'Murder': 1500,
+                'Rape': 500,
+                'Kidnapping': 300,
+                'Theft': 8000,
+                'Robbery': 400,
+                'Burglary': 3000,
+                'AutoTheft': 1500,
+                'Assault': 5000,
+                'Extortion': 300,
+                'CrimesAgainstWomen': 4000
+            };
+            for (let crime in examples) {
+                const input = document.querySelector(`input[name="${crime}"]`);
+                if (input) input.value = examples[crime];
+            }
+            document.querySelector('input[name="location"]').value = 'Test Location';
+        }
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <h1>SVM Crime Prediction</h1>
+        <a href="/userhome">Back to Dashboard</a>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <h2>Enter Crime Data for Prediction</h2>
+            
+            <div class="info-box">
+                <strong>📋 How to use:</strong><br>
+                <strong>Option 1:</strong> Enter a state name (e.g., DELHI) - crime data will be fetched automatically<br>
+                <strong>Option 2:</strong> Enter any location name + fill in the crime numbers below manually<br>
+                <br>
+                <strong>💡 Example values for testing:</strong><br>
+                Murder: 1500, Rape: 500, Kidnapping: 300, Theft: 8000, Robbery: 400, Burglary: 3000, AutoTheft: 1500, Assault: 5000, Extortion: 300, CrimesAgainstWomen: 4000
+            </div>
+            
+            <form method="post">
+                <div class="form-group">
+                    <label>Location/District/State Name:</label>
+                    <input type="text" name="location" placeholder="e.g., DELHI, MAHARASHTRA, or any custom location" value="{{ location }}" required>
+                </div>
+                
+                <div class="crime-inputs">
+                    {% for crime_type in crime_types %}
+                    <div class="form-group">
+                        <label>{{ crime_type }}:</label>
+                        <input type="number" name="{{ crime_type }}" value="{% if crime_data_display %}{{ crime_data_display[crime_type] }}{% else %}0{% endif %}" min="0" step="1" placeholder="Enter {{ crime_type }} count">
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <button type="submit" class="btn-predict">🔍 Predict Zone</button>
+                <button type="button" onclick="fillExample()" style="background:#28a745; margin-top:10px;" class="btn-predict">💡 Fill Example Data</button>
+            </form>
+            
+            {% if prediction %}
+            <div class="result {% if prediction == 'HOTSPOT' %}hotspot{% else %}safe{% endif %}">
+                <h3>{{ location }}</h3>
+                <h3>{{ prediction }}</h3>
+                <p>Confidence: {{ confidence }}%</p>
+                <p><strong>Total Crimes: {{ total_crimes }}</strong></p>
+                
+                {% if crime_data_display %}
+                <div class="crime-data-table">
+                    <strong>Crime Data Used:</strong>
+                    <table>
+                        {% for crime, value in crime_data_display.items() %}
+                        <tr>
+                            <td>{{ crime }}</td>
+                            <td>{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="card">
+            <h2>Available States in Dataset</h2>
+            <p style="color:#666; margin-bottom:10px;">Click any state name to copy it</p>
+            <div class="states-list">
+                <ul>
+                    {% for state in available_states %}
+                    <li onclick="navigator.clipboard.writeText('{{ state }}')" style="cursor:pointer;">📍 {{ state }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

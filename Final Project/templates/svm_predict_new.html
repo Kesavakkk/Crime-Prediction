@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}SVM Prediction{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="card-custom p-4 text-center" style="background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%); color: white;">
+                <h3><i class="bi bi-cpu-fill"></i> SVM Crime Prediction</h3>
+                <p class="mb-0">Enter crime data to predict if location is a hotspot or safe zone</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row" data-aos="fade-up">
+        <div class="col-lg-8 mx-auto">
+            <div class="card-custom p-4">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Location/State Name:</label>
+                        <div class="input-group">
+                            <input type="text" id="locationInput" name="location" class="form-control form-control-lg" placeholder="e.g., DELHI, MAHARASHTRA" value="{{ location }}" required>
+                            <button type="button" class="btn btn-primary" onclick="autoFillData()"><i class="bi bi-download"></i> Auto-Fill</button>
+                        </div>
+                        <small class="text-muted">Enter a state name and click Auto-Fill to load data</small>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        {% for crime_type in crime_types %}
+                        <div class="col-md-6">
+                            <label class="form-label">{{ crime_type }}:</label>
+                            <input type="number" name="{{ crime_type }}" class="form-control" value="{% if crime_data_display %}{{ crime_data_display[crime_type] }}{% else %}0{% endif %}" min="0">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn btn-gradient btn-lg w-100"><i class="bi bi-search"></i> Predict Zone</button>
+                    <button type="button" onclick="fillExample()" class="btn btn-success btn-lg w-100 mt-2"><i class="bi bi-lightbulb"></i> Fill Example Data</button>
+                </form>
+                
+                {% if prediction %}
+                <div class="alert {% if zone_level == 'HIGH' %}alert-danger{% elif zone_level == 'MODERATE' %}alert-warning{% else %}alert-success{% endif %} mt-4 text-center" data-aos="zoom-in">
+                    <h4>{{ location }}</h4>
+                    <h3><strong>{{ prediction }}</strong></h3>
+                    <h5 class="badge {% if zone_level == 'HIGH' %}bg-danger{% elif zone_level == 'MODERATE' %}bg-warning{% else %}bg-success{% endif %}">{{ zone_level }} RISK ZONE</h5>
+                    <p class="mb-0">Confidence: {{ confidence }}%</p>
+                    <p class="mb-0"><strong>Total Crimes: {{ total_crimes }}</strong></p>
+                </div>
+                {% if crime_data_display %}
+                <div class="mt-3">
+                    <h5>Crime Data Used:</h5>
+                    <div class="row g-2">
+                        {% for crime, value in crime_data_display.items() %}
+                        <div class="col-6"><small><strong>{{ crime }}:</strong> {{ value }}</small></div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="col-lg-4" data-aos="fade-left">
+            <div class="card-custom p-4">
+                <h5 class="mb-3"><i class="bi bi-list-check"></i> Available States</h5>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    {% for state in available_states %}
+                    <div class="badge bg-light text-dark m-1" style="cursor:pointer;" onclick="document.querySelector('#locationInput').value='{{ state }}'; autoFillData();">{{ state }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function fillExample() {
+    const examples = {'Murder': 1500, 'Rape': 500, 'Kidnapping': 300, 'Theft': 8000, 'Robbery': 400, 'Burglary': 3000, 'AutoTheft': 1500, 'Assault': 5000, 'Extortion': 300, 'CrimesAgainstWomen': 4000};
+    for (let crime in examples) {
+        const input = document.querySelector(`input[name="${crime}"]`);
+        if (input) input.value = examples[crime];
+    }
+    document.querySelector('#locationInput').value = 'Test Location';
+}
+
+async function autoFillData() {
+    const locationInput = document.querySelector('#locationInput');
+    const state = locationInput.value.trim();
+    
+    if (!state) {
+        alert('Please enter a state name first');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/state-crime-data/${encodeURIComponent(state)}`);
+        const result = await response.json();
+        
+        if (result.success) {
+            for (let crime in result.data) {
+                const input = document.querySelector(`input[name="${crime}"]`);
+                if (input) {
+                    input.value = Math.round(result.data[crime]);
+                }
+            }
+            alert(`Data loaded for ${result.state}`);
+        } else {
+            alert('State not found. Please check the spelling.');
+        }
+    } catch (error) {
+        alert('Error loading data. Please try again.');
+        console.error(error);
+    }
+}
+</script>
+{% endblock %}

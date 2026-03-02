@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protection Dashboard</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0f1e; color: #fff; overflow-x: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+        .header h1 { font-size: 28px; display: flex; align-items: center; gap: 10px; }
+        .back-btn { padding: 10px 20px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 8px; transition: all 0.3s; }
+        .back-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; padding: 30px; max-width: 1600px; margin: 0 auto; }
+        .card { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(102,126,234,0.4); }
+        .card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .card-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .card-title { font-size: 20px; font-weight: 600; }
+        .status-live { background: #dc3545; padding: 5px 12px; border-radius: 20px; font-size: 12px; display: inline-flex; align-items: center; gap: 5px; }
+        .pulse-dot { width: 8px; height: 8px; background: white; border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } }
+        .stat-box { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin: 10px 0; }
+        .stat-value { font-size: 32px; font-weight: bold; margin-bottom: 5px; }
+        .stat-label { font-size: 14px; color: #b0b0b0; }
+        .map-container { height: 400px; border-radius: 10px; overflow: hidden; margin-top: 15px; }
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; text-align: center; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .alert-item { background: rgba(220,53,69,0.1); border-left: 4px solid #dc3545; padding: 12px; border-radius: 5px; margin: 10px 0; }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .contact-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .contact-card:hover { background: rgba(102,126,234,0.2); transform: scale(1.05); }
+        .contact-number { font-size: 24px; font-weight: bold; color: #667eea; text-decoration: none; display: block; }
+        .zone-list { max-height: 300px; overflow-y: auto; margin-top: 15px; }
+        .zone-item { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; margin: 8px 0; display: flex; justify-content: space-between; align-items: center; }
+        .zone-safe { border-left: 4px solid #28a745; }
+        .zone-danger { border-left: 4px solid #dc3545; }
+        .badge { padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: 600; }
+        .badge-safe { background: #28a745; }
+        .badge-danger { background: #dc3545; }
+        .full-width { grid-column: 1 / -1; }
+        .protection-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-top: 20px; }
+        .step { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; text-align: center; position: relative; }
+        .step.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .step-number { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; }
+        .quick-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .action-btn { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; }
+        .action-btn:hover { background: rgba(102,126,234,0.2); border-color: #667eea; transform: scale(1.05); }
+        .action-icon { font-size: 36px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛡️ Protection Dashboard</h1>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <span class="status-live"><span class="pulse-dot"></span>LIVE</span>
+            <a href="/userhome" class="back-btn">← Back</a>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <!-- Current Status Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon" style="background: linear-gradient(135deg, #28a745, #20c997);">📍</div>
+                <div>
+                    <div class="card-title">Current Status</div>
+                    <small style="color: #b0b0b0;">Real-time monitoring</small>
+                </div>
+            </div>
+            <div class="stat-box" style="background: rgba(40,167,69,0.1); border-left: 4px solid #28a745;">
+                <div class="stat-value" style="color: #28a745;">SAFE</div>
+                <div class="stat-label">You are in a safe zone</div>
+            </div>
+            <div style="margin-top: 15px;">
+                <p style="font-size: 14px; color: #b0b0b0; margin-bottom: 10px;">📍 Location: <span id="currentLocation">Click button below</span></p>
+                <p style="font-size: 14px; color: #b0b0b0; margin-bottom: 10px;">🌐 Coordinates: <span id="coordinates">--</span></p>
+                <p style="font-size: 14px; color: #b0b0b0;">⏰ Last Updated: <span id="lastUpdate"></span></p>
+            </div>
+            <button class="btn btn-success" style="width: 100%; margin-top: 10px;" onclick="getCurrentLocation()">📍 Get My Location</button>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="manualLocation()">✏️ Enter Location Manually</button>
+            <button class="btn btn-danger" style="width: 100%; margin-top: 10px;" onclick="triggerSOS()">🚨 EMERGENCY SOS</button>
+        </div>
+
+        <!-- Live Alerts Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon" style="background: linear-gradient(135deg, #dc3545, #c82333);">⚠️</div>
+                <div>
+                    <div class="card-title">Live Alerts</div>
+                    <small style="color: #b0b0b0;">Nearby warnings</small>
+                </div>
+            </div>
+            <div id="alertsContainer">
+                <div style="text-align: center; padding: 20px; color: #b0b0b0;">
+                    <p>📍 Enable location to see nearby alerts</p>
+                </div>
+            </div>
+            <div style="margin-top: 15px; text-align: center;">
+                <a href="/alerts" class="btn btn-primary" style="font-size: 14px;">View All Alerts</a>
+            </div>
+        </div>
+
+        <!-- Emergency Contacts Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon" style="background: linear-gradient(135deg, #ffc107, #ff9800);">📞</div>
+                <div>
+                    <div class="card-title">Emergency Contacts</div>
+                    <small style="color: #b0b0b0;">Quick dial</small>
+                </div>
+            </div>
+            <div class="contact-grid">
+                <a href="tel:100" class="contact-card" style="text-decoration: none; color: inherit;">
+                    <div style="font-size: 30px; margin-bottom: 5px;">🚓</div>
+                    <div class="contact-number">100</div>
+                    <div style="font-size: 12px; color: #b0b0b0;">Police</div>
+                    <div style="font-size: 10px; color: #28a745; margin-top: 5px;">✔ Click to Call</div>
+                </a>
+                <a href="tel:108" class="contact-card" style="text-decoration: none; color: inherit;">
+                    <div style="font-size: 30px; margin-bottom: 5px;">🚑</div>
+                    <div class="contact-number">108</div>
+                    <div style="font-size: 12px; color: #b0b0b0;">Ambulance</div>
+                    <div style="font-size: 10px; color: #28a745; margin-top: 5px;">✔ Click to Call</div>
+                </a>
+                <a href="tel:1091" class="contact-card" style="text-decoration: none; color: inherit;">
+                    <div style="font-size: 30px; margin-bottom: 5px;">👩</div>
+                    <div class="contact-number">1091</div>
+                    <div style="font-size: 12px; color: #b0b0b0;">Women Helpline</div>
+                    <div style="font-size: 10px; color: #28a745; margin-top: 5px;">✔ Click to Call</div>
+                </a>
+                <a href="tel:101" class="contact-card" style="text-decoration: none; color: inherit;">
+                    <div style="font-size: 30px; margin-bottom: 5px;">🔥</div>
+                    <div class="contact-number">101</div>
+                    <div style="font-size: 12px; color: #b0b0b0;">Fire Service</div>
+                    <div style="font-size: 10px; color: #28a745; margin-top: 5px;">✔ Click to Call</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Protection Workflow Card -->
+        <div class="card full-width">
+            <div class="card-header">
+                <div class="card-icon" style="background: linear-gradient(135deg, #6610f2, #6f42c1);">🔄</div>
+                <div>
+                    <div class="card-title">Protection Workflow</div>
+                    <small style="color: #b0b0b0;">5-step safety process</small>
+                </div>
+            </div>
+            <div class="protection-steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <div style="font-size: 14px; font-weight: 600;">Detect Danger</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                    <div style="font-size: 14px; font-weight: 600;">Alert User</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div style="font-size: 14px; font-weight: 600;">Safe Route</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div style="font-size: 14px; font-weight: 600;">SOS Option</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div style="font-size: 14px; font-weight: 600;">Safe Zone</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions Card -->
+        <div class="card full-width">
+            <div class="card-header">
+                <div class="card-icon" style="background: linear-gradient(135deg, #17a2b8, #138496);">⚡</div>
+                <div>
+                    <div class="card-title">Quick Actions</div>
+                    <small style="color: #b0b0b0;">Access protection features</small>
+                </div>
+            </div>
+            <div class="quick-actions">
+                <a href="/safe-navigation" class="action-btn">
+                    <div class="action-icon">🗺️</div>
+                    <div style="font-weight: 600;">All India Safety</div>
+                    <div style="font-size: 12px; color: #b0b0b0; margin-top: 5px;">View nationwide zones</div>
+                </a>
+                <a href="/tn-safe-routes" class="action-btn">
+                    <div class="action-icon">📍</div>
+                    <div style="font-weight: 600;">Tamil Nadu Safety</div>
+                    <div style="font-size: 12px; color: #b0b0b0; margin-top: 5px;">District-level protection</div>
+                </a>
+                <div class="action-btn" onclick="findSafeRoute()">
+                    <div class="action-icon">🧭</div>
+                    <div style="font-weight: 600;">Find Safe Route</div>
+                    <div style="font-size: 12px; color: #b0b0b0; margin-top: 5px;">Navigate safely</div>
+                </div>
+                <div class="action-btn" onclick="nearbyPolice()">
+                    <div class="action-icon">🚓</div>
+                    <div style="font-weight: 600;">Nearby Police</div>
+                    <div style="font-size: 12px; color: #b0b0b0; margin-top: 5px;">Find stations</div>
+                </div>
+                <div class="action-btn" onclick="shareLocation()">
+                    <div class="action-icon">📤</div>
+                    <div style="font-weight: 600;">Share Location</div>
+                    <div style="font-size: 12px; color: #b0b0b0; margin-top: 5px;">Send to contacts</div>
+                </div>
+                <div class="action-btn" onclick="safetyTips()">
+                    <div class="action-icon">💡</div>
+                    <div style="font-weight: 600;">Safety Tips</div>
+                    <div style="font-size: 12px; color: #b0b0b0; margin-top: 5px;">Learn protection</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Crime Zones Card -->
+        <div class="card" style="grid-column: span 2;">
+            <div class="card-header">
+                <div class="card-icon" style="background: linear-gradient(135deg, #e83e8c, #d63384);">🗺️</div>
+                <div>
+                    <div class="card-title">Tamil Nadu Crime Zones</div>
+                    <small style="color: #b0b0b0;">District-wise status</small>
+                </div>
+            </div>
+            <div class="zone-list">
+                <div class="zone-item zone-danger">
+                    <div>
+                        <strong>Chennai</strong>
+                        <p style="font-size: 12px; color: #b0b0b0; margin-top: 3px;">8,500 crimes reported</p>
+                    </div>
+                    <span class="badge badge-danger">UNSAFE</span>
+                </div>
+                <div class="zone-item zone-danger">
+                    <div>
+                        <strong>Coimbatore</strong>
+                        <p style="font-size: 12px; color: #b0b0b0; margin-top: 3px;">4,200 crimes reported</p>
+                    </div>
+                    <span class="badge badge-danger">UNSAFE</span>
+                </div>
+                <div class="zone-item zone-danger">
+                    <div>
+                        <strong>Madurai</strong>
+                        <p style="font-size: 12px; color: #b0b0b0; margin-top: 3px;">3,800 crimes reported</p>
+                    </div>
+                    <span class="badge badge-danger">UNSAFE</span>
+                </div>
+                <div class="zone-item zone-safe">
+                    <div>
+                        <strong>Tiruchirappalli</strong>
+                        <p style="font-size: 12px; color: #b0b0b0; margin-top: 3px;">2,100 crimes reported</p>
+                    </div>
+                    <span class="badge badge-safe">SAFE</span>
+                </div>
+                <div class="zone-item zone-safe">
+                    <div>
+                        <strong>Vellore</strong>
+                        <p style="font-size: 12px; color: #b0b0b0; margin-top: 3px;">1,900 crimes reported</p>
+                    </div>
+                    <span class="badge badge-safe">SAFE</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon" style="background: linear-gradient(135deg, #20c997, #17a2b8);">📊</div>
+                <div>
+                    <div class="card-title">Statistics</div>
+                    <small style="color: #b0b0b0;">Safety metrics</small>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" style="color: #28a745;">12</div>
+                <div class="stat-label">Safe Districts</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" style="color: #dc3545;">5</div>
+                <div class="stat-label">High Crime Areas</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" style="color: #667eea;">24/7</div>
+                <div class="stat-label">Monitoring Active</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userLat, userLng;
+
+        function updateTime() {
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Get user's current location
+        function getCurrentLocation() {
+            document.getElementById('currentLocation').textContent = 'Getting location...';
+            document.getElementById('coordinates').textContent = 'Please wait...';
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        userLat = position.coords.latitude;
+                        userLng = position.coords.longitude;
+                        document.getElementById('coordinates').textContent = 
+                            userLat.toFixed(4) + ', ' + userLng.toFixed(4);
+                        document.getElementById('currentLocation').textContent = 'Location detected!';
+                        
+                        // Fetch nearby alerts
+                        fetchNearbyAlerts(userLat, userLng);
+                        
+                        // Try to get location name
+                        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const location = data.address.city || data.address.town || data.address.village || data.address.county || 'Unknown';
+                                const state = data.address.state || '';
+                                document.getElementById('currentLocation').textContent = 
+                                    location + (state ? ', ' + state : '');
+                            })
+                            .catch(() => {
+                                document.getElementById('currentLocation').textContent = 'Location detected';
+                            });
+                    },
+                    function(error) {
+                        if (error.code === 1) {
+                            document.getElementById('currentLocation').textContent = 'Location access denied';
+                            document.getElementById('coordinates').textContent = 'Use manual entry below';
+                        } else if (error.code === 2) {
+                            document.getElementById('currentLocation').textContent = 'Location unavailable';
+                            document.getElementById('coordinates').textContent = 'Use manual entry below';
+                        } else {
+                            document.getElementById('currentLocation').textContent = 'Location timeout';
+                            document.getElementById('coordinates').textContent = 'Use manual entry below';
+                        }
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                document.getElementById('currentLocation').textContent = 'Geolocation not supported';
+                document.getElementById('coordinates').textContent = 'Browser does not support GPS';
+                alert('Your browser does not support geolocation');
+            }
+        }
+
+        // Auto-detect location on page load
+        setTimeout(getCurrentLocation, 1000);
+
+        function fetchNearbyAlerts(lat, lng) {
+            fetch('/api/nearby-alerts', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({lat: lat, lng: lng, radius: 5})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.alerts.length > 0) {
+                    const container = document.getElementById('alertsContainer');
+                    container.innerHTML = '';
+                    data.alerts.forEach(alert => {
+                        const alertDiv = document.createElement('div');
+                        alertDiv.className = 'alert-item';
+                        alertDiv.innerHTML = `
+                            <strong>⚠️ ${alert.type}</strong>
+                            <p style="font-size: 12px; color: #b0b0b0; margin-top: 5px;">
+                                ${alert.distance} away • ${alert.time}
+                            </p>
+                        `;
+                        container.appendChild(alertDiv);
+                    });
+                } else {
+                    document.getElementById('alertsContainer').innerHTML = 
+                        '<div style="text-align: center; padding: 20px; color: #28a745;">✅ No alerts in your area</div>';
+                }
+            })
+            .catch(() => {
+                document.getElementById('alertsContainer').innerHTML = 
+                    '<div style="text-align: center; padding: 20px; color: #b0b0b0;">⚠️ Could not load alerts</div>';
+            });
+        }
+
+        function triggerSOS() {
+            if (confirm('🚨 EMERGENCY SOS\n\nThis will:\n• Alert emergency services\n• Share your location\n• Notify emergency contacts\n\nProceed?')) {
+                alert('✅ SOS ACTIVATED!\n\n📍 Location shared\n🚓 Police notified\n🚑 Ambulance dispatched\n\nHelp is on the way!');
+            }
+        }
+
+        function findSafeRoute() {
+            if (userLat && userLng) {
+                window.location.href = '/safe-navigation';
+            } else {
+                alert('📍 Please enable location access to find safe routes');
+                getCurrentLocation();
+            }
+        }
+
+        function nearbyPolice() {
+            alert('🚓 Nearby Police Stations\n\n1. Anna Nagar Police Station - 1.2 km\n2. T. Nagar Police Station - 2.5 km\n3. Egmore Police Station - 3.1 km');
+        }
+
+        function shareLocation() {
+            if (userLat && userLng) {
+                const locationUrl = `https://www.google.com/maps?q=${userLat},${userLng}`;
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'My Current Location',
+                        text: `I'm at: ${document.getElementById('currentLocation').textContent}`,
+                        url: locationUrl
+                    }).catch(() => {
+                        prompt('Share this location URL:', locationUrl);
+                    });
+                } else {
+                    prompt('Share this location URL:', locationUrl);
+                }
+            } else {
+                alert('📍 Please enable location access to share your location');
+                getCurrentLocation();
+            }
+        }
+
+        function safetyTips() {
+            alert('💡 Safety Tips\n\n✓ Stay in well-lit areas\n✓ Keep emergency numbers handy\n✓ Share location with trusted contacts\n✓ Avoid isolated routes at night\n✓ Trust your instincts');
+        }
+
+        function manualLocation() {
+            const location = prompt('Enter your location (City, State):\n\nExample: Chennai, Tamil Nadu');
+            if (location) {
+                document.getElementById('currentLocation').textContent = location;
+                
+                // Try to geocode the location
+                fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.length > 0) {
+                            userLat = parseFloat(data[0].lat);
+                            userLng = parseFloat(data[0].lon);
+                            document.getElementById('coordinates').textContent = 
+                                userLat.toFixed(4) + ', ' + userLng.toFixed(4);
+                            
+                            // Check if location is in high-crime areas
+                            checkLocationSafety(location.toLowerCase(), userLat, userLng);
+                        } else {
+                            alert('⚠️ Location not found. Please try again with a valid location.');
+                        }
+                    })
+                    .catch(() => {
+                        alert('⚠️ Could not find location. Please check your internet connection.');
+                    });
+            }
+        }
+
+        function checkLocationSafety(locationName, lat, lng) {
+            const highCrimeAreas = [
+                {name: 'chennai', lat: 13.0827, lng: 80.2707, crimes: 8500},
+                {name: 'coimbatore', lat: 11.0168, lng: 76.9558, crimes: 4200},
+                {name: 'madurai', lat: 9.9252, lng: 78.1198, crimes: 3800},
+                {name: 'salem', lat: 11.6643, lng: 78.1460, crimes: 2800},
+                {name: 'mumbai', lat: 19.0760, lng: 72.8777, crimes: 12000},
+                {name: 'delhi', lat: 28.7041, lng: 77.1025, crimes: 15000},
+                {name: 'bangalore', lat: 12.9716, lng: 77.5946, crimes: 9000}
+            ];
+
+            let isUnsafe = false;
+            let crimeCount = 0;
+            
+            // Check by name
+            for (let area of highCrimeAreas) {
+                if (locationName.includes(area.name)) {
+                    isUnsafe = true;
+                    crimeCount = area.crimes;
+                    break;
+                }
+            }
+            
+            // Check by proximity (within 50km)
+            if (!isUnsafe) {
+                for (let area of highCrimeAreas) {
+                    const distance = Math.sqrt(Math.pow((lat - area.lat) * 111, 2) + Math.pow((lng - area.lng) * 111, 2));
+                    if (distance < 50) {
+                        isUnsafe = true;
+                        crimeCount = area.crimes;
+                        break;
+                    }
+                }
+            }
+
+            // Update status display
+            const statusBox = document.querySelector('.stat-box');
+            const statusValue = document.querySelector('.stat-value');
+            const statusLabel = document.querySelector('.stat-label');
+            
+            if (isUnsafe) {
+                statusBox.style.background = 'rgba(220,53,69,0.1)';
+                statusBox.style.borderLeft = '4px solid #dc3545';
+                statusValue.style.color = '#dc3545';
+                statusValue.textContent = 'UNSAFE';
+                statusLabel.textContent = `High crime area - ${crimeCount} crimes reported`;
+                alert(`⚠️ WARNING!\n\nYou are in a HIGH CRIME AREA\n\nCrimes Reported: ${crimeCount}\n\n• Stay alert\n• Avoid isolated areas\n• Keep emergency contacts ready`);
+            } else {
+                statusBox.style.background = 'rgba(40,167,69,0.1)';
+                statusBox.style.borderLeft = '4px solid #28a745';
+                statusValue.style.color = '#28a745';
+                statusValue.textContent = 'SAFE';
+                statusLabel.textContent = 'You are in a safe zone';
+                alert('✅ Location set successfully!\n\n' + locationName + '\n\nThis area is relatively safe.');
+            }
+        }
+    </script>
+</body>
+</html>

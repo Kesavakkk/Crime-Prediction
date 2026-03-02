@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Crime Analytics{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4" data-aos="fade-up">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="bi bi-exclamation-triangle fs-1 mb-2"></i>
+                <div class="stat-number">{{ stats.total_crimes }}</div>
+                <div>Total Crimes</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="bi bi-map fs-1 mb-2"></i>
+                <div class="stat-number">{{ stats.total_states }}</div>
+                <div>States/UTs</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="bi bi-list-check fs-1 mb-2"></i>
+                <div class="stat-number">{{ stats.crime_types }}</div>
+                <div>Crime Types</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="bi bi-calendar-range fs-1 mb-2"></i>
+                <div class="stat-number">{{ stats.years }}</div>
+                <div>Years of Data</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row g-4">
+        <!-- Top States Chart -->
+        <div class="col-lg-6" data-aos="fade-right">
+            <div class="card-custom p-4">
+                <h4 class="mb-4"><i class="bi bi-bar-chart-fill text-primary"></i> Top 10 States by Crime</h4>
+                <canvas id="statesChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Crime Types Chart -->
+        <div class="col-lg-6" data-aos="fade-left">
+            <div class="card-custom p-4">
+                <h4 class="mb-4"><i class="bi bi-pie-chart-fill text-danger"></i> Crime Types Distribution</h4>
+                <canvas id="crimeTypesChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Yearly Trends Chart -->
+        {% if chart3 %}
+        <div class="col-12" data-aos="fade-up">
+            <div class="card-custom p-4">
+                <h4 class="mb-4"><i class="bi bi-graph-up text-success"></i> Yearly Crime Trends</h4>
+                <canvas id="trendsChart"></canvas>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Top States Chart
+    const statesCtx = document.getElementById('statesChart').getContext('2d');
+    new Chart(statesCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ chart1_labels|tojson }},
+            datasets: [{
+                label: 'Total Crimes',
+                data: {{ chart1_data|tojson }},
+                backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                borderColor: 'rgba(102, 126, 234, 1)',
+                borderWidth: 2,
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    padding: 12,
+                    titleFont: { size: 14 },
+                    bodyFont: { size: 13 }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+
+    // Crime Types Chart
+    const crimeTypesCtx = document.getElementById('crimeTypesChart').getContext('2d');
+    new Chart(crimeTypesCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ chart2_labels|tojson }},
+            datasets: [{
+                data: {{ chart2_data|tojson }},
+                backgroundColor: [
+                    'rgba(220, 53, 69, 0.8)',
+                    'rgba(255, 193, 7, 0.8)',
+                    'rgba(40, 167, 69, 0.8)',
+                    'rgba(23, 162, 184, 0.8)',
+                    'rgba(102, 126, 234, 0.8)',
+                    'rgba(118, 75, 162, 0.8)',
+                    'rgba(253, 126, 20, 0.8)',
+                    'rgba(32, 201, 151, 0.8)',
+                    'rgba(232, 62, 140, 0.8)',
+                    'rgba(108, 117, 125, 0.8)'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: { padding: 15, font: { size: 12 } }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    padding: 12
+                }
+            }
+        }
+    });
+
+    {% if chart3 %}
+    // Trends Chart
+    const trendsCtx = document.getElementById('trendsChart').getContext('2d');
+    new Chart(trendsCtx, {
+        type: 'line',
+        data: {
+            labels: {{ chart3_labels|tojson }},
+            datasets: [{
+                label: 'Total Crimes',
+                data: {{ chart3_data|tojson }},
+                borderColor: 'rgba(40, 167, 69, 1)',
+                backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                pointBackgroundColor: 'rgba(40, 167, 69, 1)',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    padding: 12
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+    {% endif %}
+</script>
+{% endblock %}

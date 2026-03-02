@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block title %}Visualize{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="card-custom p-4">
+                <h3><i class="bi bi-bar-chart-line-fill text-primary"></i> Crime Data Visualization</h3>
+                <p class="text-muted mb-0">Interactive charts showing crime statistics across India and Tamil Nadu</p>
+            </div>
+        </div>
+    </div>
+    
+    {% if chart_data %}
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-12">
+            <div class="card-custom p-4">
+                <h4 class="mb-4 text-center"><i class="bi bi-graph-up"></i> Tamil Nadu vs All India Crime Statistics</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <h5 class="text-center mb-3">Tamil Nadu vs All India</h5>
+                            <canvas id="tnVsIndiaChart" style="max-height: 300px;"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <h5 class="text-center mb-3">Top 5 Crime Types - Tamil Nadu</h5>
+                            <canvas id="tnCrimeTypesChart" style="max-height: 300px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <h5 class="text-center mb-3">Top 5 Crime Types - All India</h5>
+                            <canvas id="indiaCrimeTypesChart" style="max-height: 350px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="row" data-aos="fade-up">
+        <div class="col-12">
+            <div class="card-custom p-4">
+                <h4 class="mb-4"><i class="bi bi-graph-up"></i> Top 10 States by Total Crime</h4>
+                <img src="data:image/png;base64,{{ chart_url }}" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+{% if chart_data %}
+// Tamil Nadu vs India Comparison Chart
+const tnVsIndiaCtx = document.getElementById('tnVsIndiaChart').getContext('2d');
+new Chart(tnVsIndiaCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Tamil Nadu', 'All India'],
+        datasets: [{
+            label: 'Total Crimes',
+            data: [{{ chart_data.tn_total }}, {{ chart_data.india_total }}],
+            backgroundColor: ['#667eea', '#764ba2'],
+            borderColor: ['#667eea', '#764ba2'],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+            legend: { display: true },
+            title: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+// Tamil Nadu Crime Types Chart
+const tnCrimeTypesCtx = document.getElementById('tnCrimeTypesChart').getContext('2d');
+new Chart(tnCrimeTypesCtx, {
+    type: 'doughnut',
+    data: {
+        labels: {{ chart_data.tn_crime_labels | tojson }},
+        datasets: [{
+            data: {{ chart_data.tn_crime_values | tojson }},
+            backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b'],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+            legend: { position: 'bottom' }
+        }
+    }
+});
+
+// India Crime Types Chart
+const indiaCrimeTypesCtx = document.getElementById('indiaCrimeTypesChart').getContext('2d');
+new Chart(indiaCrimeTypesCtx, {
+    type: 'bar',
+    data: {
+        labels: {{ chart_data.india_crime_labels | tojson }},
+        datasets: [{
+            label: 'Crime Count',
+            data: {{ chart_data.india_crime_values | tojson }},
+            backgroundColor: '#667eea',
+            borderColor: '#764ba2',
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        indexAxis: 'y',
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            x: { beginAtZero: true }
+        }
+    }
+});
+{% endif %}
+</script>
+{% endblock %}

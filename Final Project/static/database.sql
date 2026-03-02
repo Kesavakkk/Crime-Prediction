@@ -1,0 +1,11 @@
+CREATE DATABASE IF NOT EXISTS crime_prediction;
+USE crime_prediction;
+
+CREATE TABLE IF NOT EXISTS register (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    mobile VARCHAR(15) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    uname VARCHAR(50) NOT NULL UNIQUE,
+    pass VARCHAR(255) NOT NULL
+);

@@ -1,0 +1,121 @@
+Year,State,District,CrimeType,NumberOfCases,Population,CrimeRate,UrbanRural
+2023,Andhra Pradesh,Visakhapatnam,Murder,145,2035000,7.12,Urban
+2023,Andhra Pradesh,Visakhapatnam,Rape,89,2035000,4.37,Urban
+2023,Andhra Pradesh,Visakhapatnam,Kidnapping,67,2035000,3.29,Urban
+2023,Andhra Pradesh,Visakhapatnam,CrimesAgainstWomen,892,2035000,43.83,Urban
+2023,Andhra Pradesh,Guntur,Murder,98,4889000,2.00,Rural
+2023,Andhra Pradesh,Guntur,Rape,56,4889000,1.15,Rural
+2023,Andhra Pradesh,Guntur,Kidnapping,45,4889000,0.92,Rural
+2023,Andhra Pradesh,Guntur,CrimesAgainstWomen,567,4889000,11.60,Rural
+2023,Maharashtra,Mumbai,Murder,234,12442000,1.88,Urban
+2023,Maharashtra,Mumbai,Rape,178,12442000,1.43,Urban
+2023,Maharashtra,Mumbai,Kidnapping,156,12442000,1.25,Urban
+2023,Maharashtra,Mumbai,CrimesAgainstWomen,1456,12442000,11.70,Urban
+2023,Maharashtra,Pune,Murder,167,9429000,1.77,Urban
+2023,Maharashtra,Pune,Rape,134,9429000,1.42,Urban
+2023,Maharashtra,Pune,Kidnapping,112,9429000,1.19,Urban
+2023,Maharashtra,Pune,CrimesAgainstWomen,1123,9429000,11.91,Urban
+2023,Delhi,Central Delhi,Murder,189,703000,26.89,Urban
+2023,Delhi,Central Delhi,Rape,145,703000,20.63,Urban
+2023,Delhi,Central Delhi,Kidnapping,123,703000,17.50,Urban
+2023,Delhi,Central Delhi,CrimesAgainstWomen,1234,703000,175.53,Urban
+2023,Delhi,South Delhi,Murder,156,2731000,5.71,Urban
+2023,Delhi,South Delhi,Rape,134,2731000,4.91,Urban
+2023,Delhi,South Delhi,Kidnapping,98,2731000,3.59,Urban
+2023,Delhi,South Delhi,CrimesAgainstWomen,1089,2731000,39.88,Urban
+2023,Uttar Pradesh,Lucknow,Murder,234,2817000,8.31,Urban
+2023,Uttar Pradesh,Lucknow,Rape,189,2817000,6.71,Urban
+2023,Uttar Pradesh,Lucknow,Kidnapping,167,2817000,5.93,Urban
+2023,Uttar Pradesh,Lucknow,CrimesAgainstWomen,1567,2817000,55.63,Urban
+2023,Uttar Pradesh,Varanasi,Murder,178,3682000,4.83,Rural
+2023,Uttar Pradesh,Varanasi,Rape,145,3682000,3.94,Rural
+2023,Uttar Pradesh,Varanasi,Kidnapping,123,3682000,3.34,Rural
+2023,Uttar Pradesh,Varanasi,CrimesAgainstWomen,1234,3682000,33.51,Rural
+2023,Karnataka,Bangalore,Murder,198,12765000,1.55,Urban
+2023,Karnataka,Bangalore,Rape,167,12765000,1.31,Urban
+2023,Karnataka,Bangalore,Kidnapping,145,12765000,1.14,Urban
+2023,Karnataka,Bangalore,CrimesAgainstWomen,1456,12765000,11.40,Urban
+2023,Karnataka,Mysore,Murder,89,3001000,2.97,Rural
+2023,Karnataka,Mysore,Rape,67,3001000,2.23,Rural
+2023,Karnataka,Mysore,Kidnapping,56,3001000,1.87,Rural
+2023,Karnataka,Mysore,CrimesAgainstWomen,678,3001000,22.59,Rural
+2023,Tamil Nadu,Chennai,Murder,189,7088000,2.67,Urban
+2023,Tamil Nadu,Chennai,Rape,156,7088000,2.20,Urban
+2023,Tamil Nadu,Chennai,Kidnapping,134,7088000,1.89,Urban
+2023,Tamil Nadu,Chennai,CrimesAgainstWomen,1345,7088000,18.98,Urban
+2023,Tamil Nadu,Coimbatore,Murder,123,3458000,3.56,Urban
+2023,Tamil Nadu,Coimbatore,Rape,98,3458000,2.83,Urban
+2023,Tamil Nadu,Coimbatore,Kidnapping,89,3458000,2.57,Urban
+2023,Tamil Nadu,Coimbatore,CrimesAgainstWomen,987,3458000,28.54,Urban
+2023,West Bengal,Kolkata,Murder,167,4496000,3.71,Urban
+2023,West Bengal,Kolkata,Rape,145,4496000,3.23,Urban
+2023,West Bengal,Kolkata,Kidnapping,123,4496000,2.74,Urban
+2023,West Bengal,Kolkata,CrimesAgainstWomen,1234,4496000,27.45,Urban
+2023,West Bengal,Howrah,Murder,134,4850000,2.76,Rural
+2023,West Bengal,Howrah,Rape,112,4850000,2.31,Rural
+2023,West Bengal,Howrah,Kidnapping,98,4850000,2.02,Rural
+2023,West Bengal,Howrah,CrimesAgainstWomen,1023,4850000,21.09,Rural
+2023,Rajasthan,Jaipur,Murder,178,3073000,5.79,Urban
+2023,Rajasthan,Jaipur,Rape,156,3073000,5.08,Urban
+2023,Rajasthan,Jaipur,Kidnapping,134,3073000,4.36,Urban
+2023,Rajasthan,Jaipur,CrimesAgainstWomen,1456,3073000,47.38,Urban
+2023,Rajasthan,Jodhpur,Murder,123,3687000,3.34,Rural
+2023,Rajasthan,Jodhpur,Rape,98,3687000,2.66,Rural
+2023,Rajasthan,Jodhpur,Kidnapping,89,3687000,2.41,Rural
+2023,Rajasthan,Jodhpur,CrimesAgainstWomen,1123,3687000,30.46,Rural
+2023,Gujarat,Ahmedabad,Murder,189,7681000,2.46,Urban
+2023,Gujarat,Ahmedabad,Rape,167,7681000,2.17,Urban
+2023,Gujarat,Ahmedabad,Kidnapping,145,7681000,1.89,Urban
+2023,Gujarat,Ahmedabad,CrimesAgainstWomen,1567,7681000,20.40,Urban
+2023,Gujarat,Surat,Murder,156,6081000,2.57,Urban
+2023,Gujarat,Surat,Rape,134,6081000,2.20,Urban
+2023,Gujarat,Surat,Kidnapping,112,6081000,1.84,Urban
+2023,Gujarat,Surat,CrimesAgainstWomen,1345,6081000,22.12,Urban
+2023,Bihar,Patna,Murder,234,5838000,4.01,Urban
+2023,Bihar,Patna,Rape,198,5838000,3.39,Urban
+2023,Bihar,Patna,Kidnapping,178,5838000,3.05,Urban
+2023,Bihar,Patna,CrimesAgainstWomen,1789,5838000,30.64,Urban
+2023,Bihar,Gaya,Murder,189,4391000,4.30,Rural
+2023,Bihar,Gaya,Rape,167,4391000,3.80,Rural
+2023,Bihar,Gaya,Kidnapping,145,4391000,3.30,Rural
+2023,Bihar,Gaya,CrimesAgainstWomen,1456,4391000,33.16,Rural
+2023,Madhya Pradesh,Bhopal,Murder,178,1798000,9.90,Urban
+2023,Madhya Pradesh,Bhopal,Rape,156,1798000,8.68,Urban
+2023,Madhya Pradesh,Bhopal,Kidnapping,134,1798000,7.45,Urban
+2023,Madhya Pradesh,Bhopal,CrimesAgainstWomen,1567,1798000,87.15,Urban
+2023,Madhya Pradesh,Indore,Murder,167,2167000,7.71,Urban
+2023,Madhya Pradesh,Indore,Rape,145,2167000,6.69,Urban
+2023,Madhya Pradesh,Indore,Kidnapping,123,2167000,5.68,Urban
+2023,Madhya Pradesh,Indore,CrimesAgainstWomen,1456,2167000,67.19,Urban
+2023,Kerala,Thiruvananthapuram,Murder,89,3301000,2.70,Urban
+2023,Kerala,Thiruvananthapuram,Rape,67,3301000,2.03,Urban
+2023,Kerala,Thiruvananthapuram,Kidnapping,56,3301000,1.70,Urban
+2023,Kerala,Thiruvananthapuram,CrimesAgainstWomen,789,3301000,23.90,Urban
+2023,Kerala,Kochi,Murder,98,2119000,4.62,Urban
+2023,Kerala,Kochi,Rape,78,2119000,3.68,Urban
+2023,Kerala,Kochi,Kidnapping,67,2119000,3.16,Urban
+2023,Kerala,Kochi,CrimesAgainstWomen,867,2119000,40.92,Urban
+2023,Telangana,Hyderabad,Murder,198,10004000,1.98,Urban
+2023,Telangana,Hyderabad,Rape,178,10004000,1.78,Urban
+2023,Telangana,Hyderabad,Kidnapping,156,10004000,1.56,Urban
+2023,Telangana,Hyderabad,CrimesAgainstWomen,1678,10004000,16.77,Urban
+2023,Telangana,Warangal,Murder,123,3512000,3.50,Rural
+2023,Telangana,Warangal,Rape,98,3512000,2.79,Rural
+2023,Telangana,Warangal,Kidnapping,89,3512000,2.53,Rural
+2023,Telangana,Warangal,CrimesAgainstWomen,1123,3512000,31.97,Rural
+2023,Punjab,Ludhiana,Murder,134,3498000,3.83,Urban
+2023,Punjab,Ludhiana,Rape,112,3498000,3.20,Urban
+2023,Punjab,Ludhiana,Kidnapping,98,3498000,2.80,Urban
+2023,Punjab,Ludhiana,CrimesAgainstWomen,1234,3498000,35.28,Urban
+2023,Punjab,Amritsar,Murder,123,2490000,4.94,Urban
+2023,Punjab,Amritsar,Rape,98,2490000,3.94,Urban
+2023,Punjab,Amritsar,Kidnapping,89,2490000,3.57,Urban
+2023,Punjab,Amritsar,CrimesAgainstWomen,1123,2490000,45.10,Urban
+2023,Haryana,Gurgaon,Murder,156,1514000,10.30,Urban
+2023,Haryana,Gurgaon,Rape,134,1514000,8.85,Urban
+2023,Haryana,Gurgaon,Kidnapping,112,1514000,7.40,Urban
+2023,Haryana,Gurgaon,CrimesAgainstWomen,1456,1514000,96.17,Urban
+2023,Haryana,Faridabad,Murder,145,1809000,8.02,Urban
+2023,Haryana,Faridabad,Rape,123,1809000,6.80,Urban
+2023,Haryana,Faridabad,Kidnapping,98,1809000,5.42,Urban
+2023,Haryana,Faridabad,CrimesAgainstWomen,1345,1809000,74.35,Urban

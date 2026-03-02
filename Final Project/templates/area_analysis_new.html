@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Area Analysis{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="card-custom p-4">
+                <h3><i class="bi bi-geo-alt-fill text-primary"></i> Area-Wise Crime Hotspot Analysis</h3>
+                <p class="text-muted mb-0">Get district-level crime hotspot predictions with pinpoint accuracy</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-lg-8 mx-auto">
+            <div class="card-custom p-4">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Search by City/State:</label>
+                        <input type="text" name="search_query" class="form-control form-control-lg" placeholder="Enter city name (e.g., Delhi, Mumbai, Tamil Nadu...)" value="{{ search_query }}" required>
+                    </div>
+                    <button type="submit" class="btn btn-gradient btn-lg w-100"><i class="bi bi-search"></i> Analyze</button>
+                </form>
+                <div class="mt-3">
+                    <strong>Quick Search:</strong>
+                    <div class="d-flex flex-wrap gap-2 mt-2">
+                        {% for city in cities %}
+                        <button class="btn btn-outline-primary btn-sm" onclick="document.querySelector('input[name=search_query]').value='{{ city }}'; document.querySelector('form').submit();">{{ city }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if result %}
+        {% if result.error %}
+        <div class="alert alert-danger" data-aos="fade-up">{{ result.error }}</div>
+        {% else %}
+        <div class="row g-4" data-aos="fade-up">
+            {% for district in result.districts %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card-custom p-3 h-100">
+                    <h5 class="mb-3">{{ district.district }}</h5>
+                    <div class="mb-2"><strong>Total Crimes:</strong> {{ district.total_crimes }}</div>
+                    {% for crime, count in district.crime_types.items() %}
+                    <div class="d-flex justify-content-between"><span>{{ crime }}:</span><span>{{ count }}</span></div>
+                    {% endfor %}
+                    <div class="progress mt-3" style="height: 8px;">
+                        <div class="progress-bar {% if district.risk_score > 70 %}bg-danger{% elif district.risk_score > 40 %}bg-warning{% else %}bg-success{% endif %}" style="width: {{ district.risk_score }}%"></div>
+                    </div>
+                    <small class="text-muted">Risk: {{ district.risk_score }}%</small>
+                    <span class="badge {% if district.status == 'HOTSPOT' %}bg-danger{% elif district.status == 'MODERATE' %}bg-warning{% else %}bg-success{% endif %} mt-2">{{ district.status }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if map_html %}
+        <div class="row mt-4" data-aos="fade-up">
+            <div class="col-12">
+                <div class="card-custom p-4">
+                    <h4 class="mb-3"><i class="bi bi-map"></i> Interactive Hotspot Map</h4>
+                    <div style="height: 500px; border-radius: 10px; overflow: hidden;">{{ map_html|safe }}</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

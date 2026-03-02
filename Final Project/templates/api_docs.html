@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time API Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .header h1 { font-size: 32px; margin-bottom: 10px; }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 24px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .card h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 18px;
+        }
+        .endpoint {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+        }
+        .method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+        .emit { background: #28a745; color: white; }
+        .listen { background: #17a2b8; color: white; }
+        code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .param {
+            background: #e9ecef;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .param strong { color: #667eea; }
+        a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔴 Real-Time Crime Prediction API</h1>
+            <p>WebSocket-based real-time communication for live crime data updates and alerts</p>
+        </div>
+
+        <div class="card">
+            <h2>Getting Started</h2>
+            <p>Connect to the WebSocket server using Socket.IO client library:</p>
+            <code>const socket = io('http://localhost:5000');</code>
+            
+            <h3>Installation</h3>
+            <code>npm install socket.io-client
+# or
+&lt;script src="https://cdn.socket.io/4.5.4/socket.io.min.js"&gt;&lt;/script&gt;</code>
+        </div>
+
+        <div class="card">
+            <h2>WebSocket Events</h2>
+            
+            <div class="endpoint">
+                <span class="method listen">LISTEN</span>
+                <strong>connect</strong>
+                <p>Triggered when client successfully connects to the server</p>
+                <code>socket.on('connect', () => {
+    console.log('Connected to server');
+});</code>
+            </div>
+
+            <div class="endpoint">
+                <span class="method listen">LISTEN</span>
+                <strong>disconnect</strong>
+                <p>Triggered when client disconnects from the server</p>
+                <code>socket.on('disconnect', () => {
+    console.log('Disconnected from server');
+});</code>
+            </div>
+
+            <div class="endpoint">
+                <span class="method listen">LISTEN</span>
+                <strong>user_count</strong>
+                <p>Receives the current number of active users</p>
+                <div class="param"><strong>count</strong> (integer): Number of active users</div>
+                <code>socket.on('user_count', (data) => {
+    console.log('Active users:', data.count);
+});</code>
+            </div>
+
+            <div class="endpoint">
+                <span class="method emit">EMIT</span>
+                <strong>request_live_data</strong>
+                <p>Request latest crime statistics from the server</p>
+                <code>socket.emit('request_live_data');</code>
+            </div>
+
+            <div class="endpoint">
+                <span class="method listen">LISTEN</span>
+                <strong>live_data_update</strong>
+                <p>Receives live crime data updates</p>
+                <div class="param"><strong>states</strong> (array): List of state names</div>
+                <div class="param"><strong>crimes</strong> (array): Crime counts for each state</div>
+                <div class="param"><strong>year</strong> (integer): Data year</div>
+                <div class="param"><strong>timestamp</strong> (string): ISO timestamp</div>
+                <code>socket.on('live_data_update', (data) => {
+    console.log('States:', data.states);
+    console.log('Crimes:', data.crimes);
+    console.log('Year:', data.year);
+    console.log('Timestamp:', data.timestamp);
+});</code>
+            </div>
+
+            <div class="endpoint">
+                <span class="method emit">EMIT</span>
+                <strong>crime_alert</strong>
+                <p>Send a crime alert to all connected clients</p>
+                <div class="param"><strong>state</strong> (string): State name</div>
+                <div class="param"><strong>crime_type</strong> (string): Type of crime</div>
+                <div class="param"><strong>severity</strong> (string): 'high', 'medium', or 'low'</div>
+                <code>socket.emit('crime_alert', {
+    state: 'MAHARASHTRA',
+    crime_type: 'Theft',
+    severity: 'high'
+});</code>
+            </div>
+
+            <div class="endpoint">
+                <span class="method listen">LISTEN</span>
+                <strong>new_alert</strong>
+                <p>Receives new crime alerts broadcast to all clients</p>
+                <div class="param"><strong>state</strong> (string): State name</div>
+                <div class="param"><strong>crime_type</strong> (string): Type of crime</div>
+                <div class="param"><strong>severity</strong> (string): Alert severity level</div>
+                <div class="param"><strong>timestamp</strong> (string): ISO timestamp</div>
+                <div class="param"><strong>user</strong> (string): Username who triggered alert</div>
+                <code>socket.on('new_alert', (alert) => {
+    console.log('New alert:', alert);
+    // Display alert to user
+});</code>
+            </div>
+
+            <div class="endpoint">
+                <span class="method listen">LISTEN</span>
+                <strong>error</strong>
+                <p>Receives error messages from the server</p>
+                <div class="param"><strong>message</strong> (string): Error description</div>
+                <code>socket.on('error', (data) => {
+    console.error('Error:', data.message);
+});</code>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Complete Example</h2>
+            <code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;script src="https://cdn.socket.io/4.5.4/socket.io.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Real-Time Crime Monitor&lt;/h1&gt;
+    &lt;div id="userCount"&gt;Users: 0&lt;/div&gt;
+    &lt;div id="crimeData"&gt;&lt;/div&gt;
+    &lt;div id="alerts"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        const socket = io();
+
+        socket.on('connect', () => {
+            console.log('Connected!');
+            socket.emit('request_live_data');
+        });
+
+        socket.on('user_count', (data) => {
+            document.getElementById('userCount').textContent = 
+                'Users: ' + data.count;
+        });
+
+        socket.on('live_data_update', (data) => {
+            let html = '&lt;h2&gt;Crime Data ' + data.year + '&lt;/h2&gt;';
+            data.states.forEach((state, i) => {
+                html += '&lt;p&gt;' + state + ': ' + 
+                        data.crimes[i] + '&lt;/p&gt;';
+            });
+            document.getElementById('crimeData').innerHTML = html;
+        });
+
+        socket.on('new_alert', (alert) => {
+            const alertDiv = document.createElement('div');
+            alertDiv.innerHTML = 
+                '&lt;strong&gt;' + alert.state + '&lt;/strong&gt; - ' + 
+                alert.crime_type + ' (' + alert.severity + ')';
+            document.getElementById('alerts')
+                .prepend(alertDiv);
+        });
+
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            socket.emit('request_live_data');
+        }, 30000);
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code>
+        </div>
+
+        <div class="card">
+            <h2>REST API Endpoints</h2>
+            
+            <div class="endpoint">
+                <span class="method emit">POST</span>
+                <strong>/api/v1/predict</strong>
+                <p>Get crime predictions for all states</p>
+                <div class="param"><strong>crime_type</strong> (string): Type of crime to analyze</div>
+                <code>fetch('/api/v1/predict', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({crime_type: 'Total'})
+})
+.then(res => res.json())
+.then(data => console.log(data));</code>
+            </div>
+
+            <div class="endpoint">
+                <span class="method listen">GET</span>
+                <strong>/api/v1/states</strong>
+                <p>Get list of all states</p>
+                <code>fetch('/api/v1/states')
+    .then(res => res.json())
+    .then(data => console.log(data.states));</code>
+            </div>
+
+            <div class="endpoint">
+                <span class="method listen">GET</span>
+                <strong>/api/v1/crime-types</strong>
+                <p>Get list of all crime types</p>
+                <code>fetch('/api/v1/crime-types')
+    .then(res => res.json())
+    .then(data => console.log(data.crime_types));</code>
+            </div>
+
+            <div class="endpoint">
+                <span class="method listen">GET</span>
+                <strong>/api/v1/statistics</strong>
+                <p>Get overall crime statistics</p>
+                <code>fetch('/api/v1/statistics')
+    .then(res => res.json())
+    .then(data => console.log(data.statistics));</code>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Rate Limits</h2>
+            <p>The API has the following rate limits:</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>200 requests per day</li>
+                <li>50 requests per hour</li>
+                <li>Login: 10 requests per minute</li>
+                <li>Register: 5 requests per minute</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Support</h2>
+            <p>For questions or issues, please check the application logs at <code style="display:inline; padding:2px 6px;">app.log</code></p>
+            <p style="margin-top: 10px;"><a href="/userhome">← Back to Dashboard</a></p>
+        </div>
+    </div>
+</body>
+</html>

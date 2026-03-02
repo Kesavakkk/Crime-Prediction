@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Alerts</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0f1e; color: #fff; }
+        .header { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+        .header h1 { font-size: 28px; display: flex; align-items: center; gap: 10px; }
+        .back-btn { padding: 10px 20px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 8px; transition: all 0.3s; }
+        .back-btn:hover { background: rgba(255,255,255,0.3); }
+        .container { padding: 30px; max-width: 1200px; margin: 0 auto; }
+        .filters { background: #1a1a2e; padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .filter-btn { padding: 10px 20px; border: 2px solid rgba(255,255,255,0.2); background: transparent; color: white; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+        .filter-btn.active { background: #667eea; border-color: #667eea; }
+        .alert-card { background: #1a1a2e; border-radius: 10px; padding: 20px; margin-bottom: 15px; border-left: 5px solid #dc3545; transition: all 0.3s; }
+        .alert-card:hover { transform: translateX(5px); box-shadow: 0 5px 20px rgba(220,53,69,0.3); }
+        .alert-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .alert-title { font-size: 18px; font-weight: 600; }
+        .alert-time { font-size: 12px; color: #b0b0b0; }
+        .alert-body { color: #d0d0d0; margin-bottom: 10px; }
+        .alert-location { font-size: 14px; color: #667eea; display: flex; align-items: center; gap: 5px; }
+        .badge { padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: 600; }
+        .badge-critical { background: #dc3545; }
+        .badge-high { background: #ff6b6b; }
+        .badge-medium { background: #ffc107; color: #000; }
+        .badge-low { background: #28a745; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #b0b0b0; }
+        .empty-state-icon { font-size: 64px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚠️ Live Alerts</h1>
+        <a href="/protection-dashboard" class="back-btn">← Back</a>
+    </div>
+
+    <div class="container">
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterAlerts('all')">All Alerts</button>
+            <button class="filter-btn" onclick="filterAlerts('critical')">Critical</button>
+            <button class="filter-btn" onclick="filterAlerts('high')">High Risk</button>
+            <button class="filter-btn" onclick="filterAlerts('medium')">Medium</button>
+            <button class="filter-btn" onclick="filterAlerts('low')">Low</button>
+        </div>
+
+        <div id="alertsContainer">
+            <div style="text-align: center; padding: 40px; color: #b0b0b0;">
+                <div style="font-size: 48px; margin-bottom: 20px;">📍</div>
+                <p>Loading alerts based on your location...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadAlerts() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        fetchAlerts(lat, lng);
+                    },
+                    function(error) {
+                        console.log('Location error:', error);
+                        showManualLocationPrompt();
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                showManualLocationPrompt();
+            }
+        }
+
+        function showManualLocationPrompt() {
+            document.getElementById('alertsContainer').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">📍</div>
+                    <h2>Location Access Required</h2>
+                    <p>Enable location or enter manually to view alerts</p>
+                    <button onclick="manualLocation()" style="padding: 12px 24px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 15px; font-size: 16px;">Enter Location Manually</button>
+                </div>
+            `;
+        }
+
+        function manualLocation() {
+            const location = prompt('Enter your city name:\n\nExample: Chennai, Mumbai, Delhi');
+            if (location) {
+                fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.length > 0) {
+                            const lat = parseFloat(data[0].lat);
+                            const lng = parseFloat(data[0].lon);
+                            fetchAlerts(lat, lng);
+                        } else {
+                            alert('Location not found. Please try again.');
+                            showManualLocationPrompt();
+                        }
+                    })
+                    .catch(() => {
+                        alert('Error finding location. Please try again.');
+                        showManualLocationPrompt();
+                    });
+            }
+        }
+
+        function fetchAlerts(lat, lng) {
+            fetch('/api/nearby-alerts', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({lat: lat, lng: lng, radius: 10})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.alerts.length > 0) {
+                    displayAlerts(data.alerts);
+                } else {
+                    showNoAlerts();
+                }
+            })
+            .catch(() => showError());
+        }
+
+        function displayAlerts(alerts) {
+            const container = document.getElementById('alertsContainer');
+            container.innerHTML = '';
+            
+            alerts.forEach(alert => {
+                const severityClass = alert.severity.toLowerCase();
+                const card = document.createElement('div');
+                card.className = 'alert-card';
+                card.setAttribute('data-severity', severityClass);
+                card.innerHTML = `
+                    <div class="alert-header">
+                        <div class="alert-title">⚠️ ${alert.type} Reported</div>
+                        <span class="badge badge-${severityClass}">${alert.severity.toUpperCase()}</span>
+                    </div>
+                    <div class="alert-body">Crime incident detected in your area. Stay alert and avoid if possible.</div>
+                    <div class="alert-location">📍 ${alert.distance} away</div>
+                    <div class="alert-time">⏰ ${alert.time}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function showNoAlerts() {
+            document.getElementById('alertsContainer').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">✅</div>
+                    <h2>No Alerts in Your Area</h2>
+                    <p>Your location is currently safe. Stay vigilant!</p>
+                </div>
+            `;
+        }
+
+        function showError() {
+            document.getElementById('alertsContainer').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <h2>Could Not Load Alerts</h2>
+                    <p>Please check your connection and try again.</p>
+                </div>
+            `;
+        }
+
+        function showLocationError() {
+            showManualLocationPrompt();
+        }
+
+        loadAlerts();
+
+        function filterAlerts(severity) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const alerts = document.querySelectorAll('.alert-card');
+            alerts.forEach(alert => {
+                if (severity === 'all' || alert.dataset.severity === severity) {
+                    alert.style.display = 'block';
+                } else {
+                    alert.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

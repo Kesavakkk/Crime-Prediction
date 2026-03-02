@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Prediction System - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        body.light-mode {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        body.dark-mode .navbar {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        .navbar h1 {
+            color: white;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .navbar .user-info {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        body.dark-mode .navbar .user-info {
+            color: #b0b0b0;
+        }
+        
+        .navbar .logout-btn {
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .navbar .logout-btn:hover {
+            background: #764ba2;
+        }
+        
+        .theme-toggle {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            background: #764ba2;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        body.dark-mode .card {
+            background: #0f3460;
+        }
+        
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        body.dark-mode .card h2 {
+            color: #64ffda;
+        }
+        
+        .card p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        body.dark-mode .card p {
+            color: #b0b0b0;
+        }
+        
+        .btn-predict {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn-predict:hover {
+            transform: translateY(-2px);
+        }
+        
+        .results-section {
+            margin-top: 30px;
+        }
+        
+        .results-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        body.dark-mode .results-section h3 {
+            color: #64ffda;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        body.dark-mode table td {
+            color: #e0e0e0;
+            border-bottom: 1px solid #1a1a2e;
+        }
+        
+        table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        body.dark-mode table tbody tr:hover {
+            background-color: #16213e;
+        }
+        
+        .status-safe {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .status-low {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .status-moderate {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .status-high {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .status-critical {
+            background-color: #dc3545;
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .status-unsafe {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-box .number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-box .label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .nav-group {
+            position: relative;
+        }
+        
+        .nav-group-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-group-title:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .dropdown-arrow {
+            transition: transform 0.3s;
+        }
+        
+        .dropdown-arrow.open {
+            transform: rotate(180deg);
+        }
+        
+        .nav-group-buttons {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            animation: slideDown 0.3s ease;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 200px;
+            z-index: 1000;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .nav-group-buttons.show {
+            display: flex;
+        }
+        
+        .nav-group-buttons a {
+            padding: 10px 16px !important;
+            border-radius: 8px !important;
+            text-decoration: none !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-group-buttons a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.2);
+            transition: left 0.3s ease;
+        }
+        
+        .nav-group-buttons a:hover::before {
+            left: 100%;
+        }
+        
+        .nav-group-buttons a:hover {
+            transform: translateX(5px) scale(1.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="navbar">
+        <h1>Crime Prediction System</h1>
+        <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
+            <!-- Real-time & Dashboards -->
+            <div class="nav-group">
+                <div class="nav-group-title" onclick="toggleDropdown(this)">
+                    <span>🔴 Real-time & Dashboards</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="nav-group-buttons">
+                    <a href="/realtime-dashboard" style="background:#dc3545; color:white;">
+                        <span style="display:inline-block; width:8px; height:8px; background:#fff; border-radius:50%; margin-right:5px; animation: blink 1s infinite;"></span>
+                        Live Updates
+                    </a>
+                    <a href="/dashboard" style="background:#6610f2; color:white;">Dashboard</a>
+                    <a href="/map-dashboard" style="background:#17a2b8; color:white;">🗺️ Map Dashboard</a>
+                    <a href="/protection-dashboard" style="background:#667eea; color:white;">🛡️ Protection Dashboard</a>
+                </div>
+            </div>
+            
+
+            
+            <!-- Predictions -->
+            <div class="nav-group">
+                <div class="nav-group-title" onclick="toggleDropdown(this)">
+                    <span>🎯 Predictions</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="nav-group-buttons">
+                    <a href="/svm-predict" style="background:#dc3545; color:white;">SVM Predict</a>
+                    <a href="/future-prediction" style="background:#20c997; color:white;">Future Prediction</a>
+                </div>
+            </div>
+            
+            <!-- Analysis -->
+            <div class="nav-group">
+                <div class="nav-group-title" onclick="toggleDropdown(this)">
+                    <span>📊 Analysis</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="nav-group-buttons">
+                    <a href="/area-analysis" style="background:#e83e8c; color:white;">Area Analysis</a>
+                    <a href="/heatmap" style="background:#fd7e14; color:white;">Heatmap</a>
+                    <a href="/safe-navigation" style="background:#28a745; color:white;">🗺️ Safe Navigation</a>
+                </div>
+            </div>
+            
+            <!-- Reports -->
+            <div class="nav-group">
+                <div class="nav-group-title" onclick="toggleDropdown(this)">
+                    <span>📈 Reports</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="nav-group-buttons">
+                    <a href="/statistics" style="background:#17a2b8; color:white;">Statistics</a>
+                    <a href="/crime-trends" style="background:#28a745; color:white;">Crime Trends</a>
+                    <a href="/model-evaluation" style="background:#6f42c1; color:white;">Model Evaluation</a>
+                    <a href="/history" style="background:#ffc107; color:white;">History</a>
+                </div>
+            </div>
+            
+            <!-- User -->
+            <div class="nav-group">
+                <div class="nav-group-title" onclick="toggleDropdown(this)">
+                    <span>👤 Account</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="nav-group-buttons">
+                    <a href="/profile" style="background:#6610f2; color:white;">Profile</a>
+                    <a href="#" onclick="toggleTheme(); return false;" class="theme-toggle" style="background:#ffc107; color:#333;">🌙 Dark Mode</a>
+                    <a href="/logout" style="background:#667eea; color:white;">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <h2>Crime Zone Prediction</h2>
+            <p>Click the button below to analyze crime patterns across Indian states and identify unsafe zones based on historical crime data.</p>
+            
+            <form method="post">
+                <label for="crime_type" style="display:block; margin-bottom:8px; font-weight:600; color:#333;">Select Crime Type:</label>
+                <select name="crime_type" id="crime_type" style="width:100%; padding:10px; margin-bottom:20px; border:1px solid #ddd; border-radius:5px;">
+                    <option value="Total" {% if selected_crime == 'Total' %}selected{% endif %}>Total Crimes</option>
+                    {% for c_type in crime_types %}
+                    <option value="{{ c_type }}" {% if selected_crime == c_type %}selected{% endif %}>{{ c_type }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn-predict">Predict Crime Zones</button>
+                <a href="/visualize" class="btn-predict" style="display:inline-block; text-decoration:none; margin-left:10px; background:#28a745;">View Charts</a>
+            </form>
+            
+            {% if result %}
+                <div class="results-section">
+                    <h3>Prediction Results</h3>
+                    
+                    <div style="margin-bottom:15px;">
+                        <a href="/export/csv" style="background:#28a745; color:white; padding:8px 16px; border-radius:5px; text-decoration:none; margin-right:10px;">Export CSV</a>
+                        <a href="/export/json" style="background:#17a2b8; color:white; padding:8px 16px; border-radius:5px; text-decoration:none;">Export JSON</a>
+                    </div>
+                    
+                    {% set safe_count = result | selectattr('1', 'equalto', 'SAFE') | list | length %}
+                    {% set low_count = result | selectattr('1', 'equalto', 'LOW') | list | length %}
+                    {% set moderate_count = result | selectattr('1', 'equalto', 'MODERATE') | list | length %}
+                    {% set high_count = result | selectattr('1', 'equalto', 'HIGH') | list | length %}
+                    {% set critical_count = result | selectattr('1', 'equalto', 'CRITICAL') | list | length %}
+                    
+                    <div class="stats">
+                        <div class="stat-box" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                            <div class="number">{{ safe_count }}</div>
+                            <div class="label">Safe Zones</div>
+                        </div>
+                        <div class="stat-box" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);">
+                            <div class="number">{{ low_count }}</div>
+                            <div class="label">Low Risk</div>
+                        </div>
+                        <div class="stat-box" style="background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);">
+                            <div class="number">{{ moderate_count }}</div>
+                            <div class="label">Moderate Risk</div>
+                        </div>
+                        <div class="stat-box" style="background: linear-gradient(135deg, #fd7e14 0%, #e8590c 100%);">
+                            <div class="number">{{ high_count }}</div>
+                            <div class="label">High Risk</div>
+                        </div>
+                        <div class="stat-box" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                            <div class="number">{{ critical_count }}</div>
+                            <div class="label">Critical Zones</div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>State/UT</th>
+                                    <th>Safety Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for r in result %}
+                                <tr>
+                                    <td>{{ r[0] }}</td>
+                                    <td>
+                                        {% if r[1] == 'SAFE' %}
+                                            <span class="status-safe">✓ {{ r[1] }}</span>
+                                        {% elif r[1] == 'LOW' %}
+                                            <span class="status-low">⚠ {{ r[1] }} RISK</span>
+                                        {% elif r[1] == 'MODERATE' %}
+                                            <span class="status-moderate">⚠ {{ r[1] }} RISK</span>
+                                        {% elif r[1] == 'HIGH' %}
+                                            <span class="status-high">⚠ {{ r[1] }} RISK</span>
+                                        {% elif r[1] == 'CRITICAL' %}
+                                            <span class="status-critical">⛔ {{ r[1] }} RISK</span>
+                                        {% else %}
+                                            <span class="status-unsafe">{{ r[1] }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>No predictions yet. Click "Predict Crime Zones" to analyze the data.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script>
+        function toggleDropdown(element) {
+            const buttons = element.nextElementSibling;
+            const arrow = element.querySelector('.dropdown-arrow');
+            
+            buttons.classList.toggle('show');
+            arrow.classList.toggle('open');
+        }
+        
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.querySelector('.theme-toggle');
+            
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                btn.textContent = '☀️ Light Mode';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                btn.textContent = '🌙 Dark Mode';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // Load saved theme
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const body = document.body;
+            const btn = document.querySelector('.theme-toggle');
+            
+            if (savedTheme === 'dark') {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                btn.textContent = '☀️ Light Mode';
+            }
+        });
+    </script>
+</body>
+</html>

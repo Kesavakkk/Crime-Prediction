@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Crime Prediction System{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+        
+        body {
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            transition: all 0.3s;
+            border-radius: 8px;
+            margin: 0 5px;
+        }
+        
+        .nav-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .btn-gradient {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 10px 25px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .card-custom {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .card-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .stat-card {
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .badge-hotspot {
+            background: #dc3545;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        
+        .badge-safe {
+            background: #28a745;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse-badge 2s infinite;
+        }
+        
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .nav-item {
+            position: relative;
+        }
+        
+        .table-custom {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .table-custom thead {
+            background: var(--primary-gradient);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-nav {
+                background: white;
+                padding: 15px;
+                border-radius: 10px;
+                margin-top: 10px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/userhome">
+                <i class="bi bi-shield-check"></i> Crime Prediction System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if session.username %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                            <span class="notification-badge" id="dashboardBadge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/alerts">
+                            <i class="bi bi-bell"></i> Alerts
+                            <span class="notification-badge" id="alertsBadge">5</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/safe-navigation">
+                            <i class="bi bi-map"></i> Safe Navigation
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/area-analysis"><i class="bi bi-geo-alt"></i> Area Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/future-prediction"><i class="bi bi-graph-up-arrow"></i> Future Predict</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/svm-predict"><i class="bi bi-cpu"></i> SVM Predict</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> {{ session.username }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/history">
+                                <i class="bi bi-clock-history"></i> History
+                                <span class="badge bg-primary rounded-pill float-end">2</span>
+                            </a></li>
+                            <li><a class="dropdown-item" href="/statistics"><i class="bi bi-bar-chart"></i> Statistics</a></li>
+                            <li><a class="dropdown-item" href="/profile">
+                                <i class="bi bi-person"></i> Profile
+                                <span class="badge bg-warning rounded-pill float-end">!</span>
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid py-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+        
+        // Update notification badges dynamically
+        function updateNotificationBadges() {
+            // Simulate real-time updates
+            const alertsCount = Math.floor(Math.random() * 10) + 1;
+            const dashboardCount = Math.floor(Math.random() * 5) + 1;
+            
+            const alertsBadge = document.getElementById('alertsBadge');
+            const dashboardBadge = document.getElementById('dashboardBadge');
+            
+            if (alertsBadge) alertsBadge.textContent = alertsCount;
+            if (dashboardBadge) dashboardBadge.textContent = dashboardCount;
+        }
+        
+        // Update badges every 30 seconds
+        setInterval(updateNotificationBadges, 30000);
+        
+        // Initial update
+        updateNotificationBadges();
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

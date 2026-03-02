@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .navbar h1 { color: #667eea; font-size: 24px; }
+        .btn { background: #667eea; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .stat-card .number { font-size: 36px; font-weight: bold; color: #667eea; margin-bottom: 10px; }
+        .stat-card .label { font-size: 14px; color: #666; }
+        .growth-up { color: #28a745; }
+        .growth-down { color: #dc3545; }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+        }
+        .chart-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .chart-card h3 { margin-bottom: 20px; color: #333; }
+        .chart-container { position: relative; height: 300px; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>📊 Advanced Analytics Dashboard</h1>
+        <a href="/userhome" class="btn">← Back to Home</a>
+    </div>
+    
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="number">{{ data.total_crimes }}</div>
+                <div class="label">Total Crimes Recorded</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">{{ data.avg_crimes }}</div>
+                <div class="label">Average Crimes per State</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">{{ data.max_state }}</div>
+                <div class="label">Highest Crime State</div>
+            </div>
+            {% if data.yoy_growth %}
+            <div class="stat-card">
+                <div class="number {% if data.yoy_growth.trend == 'up' %}growth-up{% else %}growth-down{% endif %}">
+                    {{ data.yoy_growth.growth_percent }}%
+                </div>
+                <div class="label">Year-over-Year Growth</div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="chart-grid">
+            <div class="chart-card">
+                <h3>🔴 Top 5 Crime Hotspots</h3>
+                <div class="chart-container">
+                    <canvas id="top5Chart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <h3>🟢 Bottom 5 Safest States</h3>
+                <div class="chart-container">
+                    <canvas id="bottom5Chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Top 5 Chart
+        new Chart(document.getElementById('top5Chart'), {
+            type: 'bar',
+            data: {
+                labels: {{ data.top5_states | tojson }},
+                datasets: [{
+                    label: 'Total Crimes',
+                    data: {{ data.top5_crimes | tojson }},
+                    backgroundColor: ['#dc3545', '#e74c3c', '#e67e22', '#f39c12', '#f1c40f']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
+        });
+        
+        // Bottom 5 Chart
+        new Chart(document.getElementById('bottom5Chart'), {
+            type: 'bar',
+            data: {
+                labels: {{ data.bottom5_states | tojson }},
+                datasets: [{
+                    label: 'Total Crimes',
+                    data: {{ data.bottom5_crimes | tojson }},
+                    backgroundColor: ['#28a745', '#2ecc71', '#27ae60', '#3498db', '#2980b9']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
+        });
+    </script>
+</body>
+</html>

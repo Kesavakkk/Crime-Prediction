@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Map Dashboard</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0f1e; color: #fff; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 24px; }
+        .back-btn { padding: 8px 16px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 5px; }
+        .dashboard { display: grid; grid-template-columns: 300px 1fr; height: calc(100vh - 70px); }
+        .sidebar { background: #1a1a2e; padding: 20px; overflow-y: auto; border-right: 1px solid rgba(255,255,255,0.1); }
+        .map-container { position: relative; }
+        #map { height: 100%; width: 100%; }
+        .layer-control { position: absolute; top: 20px; right: 370px; z-index: 1000; background: rgba(26,26,46,0.95); padding: 10px; border-radius: 5px; }
+        .layer-control button { display: block; width: 100%; padding: 8px; margin: 3px 0; border: none; border-radius: 3px; cursor: pointer; background: #667eea; color: white; font-size: 12px; }
+        .layer-control button.active { background: #28a745; }
+        .search-box { position: absolute; top: 20px; left: 370px; z-index: 1000; background: rgba(26,26,46,0.95); padding: 8px; border-radius: 5px; }
+        .search-box input { padding: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; border-radius: 3px; width: 200px; }
+        .directions-panel { position: absolute; bottom: 80px; left: 370px; z-index: 1000; background: rgba(26,26,46,0.95); padding: 10px; border-radius: 5px; max-width: 300px; max-height: 200px; overflow-y: auto; display: none; color: white; }
+        .directions-panel h4 { margin: 0 0 8px 0; font-size: 14px; color: #667eea; }
+        .directions-panel .step { font-size: 12px; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .control-panel { background: rgba(26,26,46,0.95); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .control-title { font-size: 16px; font-weight: 600; margin-bottom: 10px; color: #667eea; }
+        .btn { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: all 0.3s; width: 100%; margin: 5px 0; }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+        .btn.active { box-shadow: 0 0 0 3px rgba(255,255,255,0.3); transform: scale(0.95); }
+        .stat-card { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; margin: 8px 0; }
+        .stat-value { font-size: 24px; font-weight: bold; color: #667eea; }
+        .stat-label { font-size: 12px; color: #b0b0b0; }
+        .legend { background: rgba(26,26,46,0.95); padding: 15px; border-radius: 10px; position: absolute; bottom: 20px; right: 20px; z-index: 1000; }
+        .legend-item { display: flex; align-items: center; gap: 10px; margin: 5px 0; }
+        .legend-color { width: 20px; height: 20px; border-radius: 3px; }
+        .filter-group { margin: 15px 0; }
+        .filter-group label { display: block; margin-bottom: 5px; font-size: 14px; }
+        .filter-group select, .filter-group input { width: 100%; padding: 8px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; cursor: pointer; }
+        .filter-group select option { background: #1a1a2e; color: white; }
+        .alert-box { background: rgba(220,53,69,0.1); border-left: 4px solid #dc3545; padding: 10px; border-radius: 5px; margin: 10px 0; font-size: 12px; }
+        .loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000; background: rgba(0,0,0,0.8); padding: 20px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🗺️ Crime Map Dashboard</h1>
+        <a href="/userhome" class="back-btn">← Back</a>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <div class="control-panel">
+                <div class="control-title">📊 Statistics</div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCrimes">0</div>
+                    <div class="stat-label">Total Crimes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="highRiskZones">0</div>
+                    <div class="stat-label">High Risk Zones</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="safeZones">0</div>
+                    <div class="stat-label">Safe Zones</div>
+                </div>
+            </div>
+
+            <div class="control-panel">
+                <div class="control-title">🎛️ Map Controls</div>
+                <button class="btn btn-primary" id="btnHeatmap" onclick="toggleHeatmap()">🔥 Show Heatmap</button>
+                <button class="btn btn-success" id="btnMarkers" onclick="toggleMarkers()">📍 Show Markers</button>
+                <button class="btn btn-danger" id="btnDanger" onclick="toggleDangerZones()">⚠️ Danger Zones</button>
+                <button class="btn btn-primary" id="btnRoutes" onclick="toggleSafeRoutes()">🛣️ Safe Routes</button>
+            </div>
+
+            <div class="control-panel">
+                <div class="control-title">🔍 Filters</div>
+                <div class="filter-group">
+                    <label>Crime Type</label>
+                    <select id="crimeType" onchange="filterCrimes()">
+                        <option value="all">All Crimes</option>
+                        <option value="murder">Murder</option>
+                        <option value="rape">Rape</option>
+                        <option value="kidnapping">Kidnapping</option>
+                        <option value="theft">Theft</option>
+                        <option value="robbery">Robbery</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Risk Level</label>
+                    <select id="riskLevel" onchange="filterCrimes()">
+                        <option value="all">All Levels</option>
+                        <option value="high">High Risk</option>
+                        <option value="medium">Medium Risk</option>
+                        <option value="low">Low Risk</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-panel">
+                <div class="control-title">🚨 Recent Alerts</div>
+                <div class="alert-box">
+                    <strong>⚠️ High Crime Alert</strong>
+                    <p>Chennai - T. Nagar area</p>
+                </div>
+                <div class="alert-box">
+                    <strong>⚠️ Safety Warning</strong>
+                    <p>Avoid Anna Salai after 10 PM</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="layer-control">
+                <button id="streetBtn" class="active" onclick="switchLayer('street')">🗺️ Street</button>
+                <button id="satelliteBtn" onclick="switchLayer('satellite')">🛰️ Satellite</button>
+                <button id="terrainBtn" onclick="switchLayer('terrain')">⛰️ Terrain</button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search city..." onkeyup="searchLocation()">
+            </div>
+            <div class="directions-panel" id="directionsPanel"></div>
+            <div class="legend">
+                <div class="control-title">Legend</div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #dc3545;"></div>
+                    <span>High Risk</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffc107;"></div>
+                    <span>Medium Risk</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #28a745;"></div>
+                    <span>Low Risk</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <script>
+        const map = L.map('map').setView([20.5937, 78.9629], 5);
+        
+        const layers = {
+            street: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }),
+            satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '© Esri' }),
+            terrain: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { attribution: '© OpenTopoMap' })
+        };
+        
+        let currentLayer = layers.street.addTo(map);
+        let markers = {};
+        let routingControl = null;
+
+        let heatmapLayer = null;
+        let markersLayer = L.layerGroup().addTo(map);
+        let dangerZonesLayer = L.layerGroup().addTo(map);
+        let safeRoutesLayer = L.layerGroup().addTo(map);
+        
+        let heatmapActive = false;
+        let markersActive = true;
+        let dangerActive = false;
+        let routesActive = false;
+
+        const crimeData = [
+            {name: 'Chennai', lat: 13.0827, lng: 80.2707, crimes: 8500, risk: 'high'},
+            {name: 'Mumbai', lat: 19.0760, lng: 72.8777, crimes: 12000, risk: 'high'},
+            {name: 'Delhi', lat: 28.7041, lng: 77.1025, crimes: 15000, risk: 'high'},
+            {name: 'Bangalore', lat: 12.9716, lng: 77.5946, crimes: 7200, risk: 'medium'},
+            {name: 'Kolkata', lat: 22.5726, lng: 88.3639, crimes: 9800, risk: 'high'},
+            {name: 'Hyderabad', lat: 17.3850, lng: 78.4867, crimes: 6500, risk: 'medium'},
+            {name: 'Pune', lat: 18.5204, lng: 73.8567, crimes: 4200, risk: 'medium'},
+            {name: 'Ahmedabad', lat: 23.0225, lng: 72.5714, crimes: 5100, risk: 'medium'},
+            {name: 'Jaipur', lat: 26.9124, lng: 75.7873, crimes: 3800, risk: 'low'},
+            {name: 'Lucknow', lat: 26.8467, lng: 80.9462, crimes: 4500, risk: 'medium'}
+        ];
+
+        function updateStats() {
+            document.getElementById('totalCrimes').textContent = crimeData.reduce((sum, d) => sum + d.crimes, 0).toLocaleString();
+            document.getElementById('highRiskZones').textContent = crimeData.filter(d => d.risk === 'high').length;
+            document.getElementById('safeZones').textContent = crimeData.filter(d => d.risk === 'low').length;
+        }
+        
+        function switchLayer(type) {
+            map.removeLayer(currentLayer);
+            currentLayer = layers[type].addTo(map);
+            document.querySelectorAll('.layer-control button').forEach(b => b.classList.remove('active'));
+            document.getElementById(type + 'Btn').classList.add('active');
+        }
+        
+        function searchLocation() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            for (const [city, marker] of Object.entries(markers)) {
+                if (city.toLowerCase().includes(query)) {
+                    marker.openPopup();
+                    map.setView(marker.getLatLng(), 10);
+                    break;
+                }
+            }
+        }
+        
+        function getDirections(start, end) {
+            if (routingControl) map.removeControl(routingControl);
+            
+            routingControl = L.Routing.control({
+                waypoints: [L.latLng(start), L.latLng(end)],
+                routeWhileDragging: false,
+                show: false,
+                createMarker: () => null
+            }).on('routesfound', function(e) {
+                const route = e.routes[0];
+                const panel = document.getElementById('directionsPanel');
+                panel.innerHTML = `<h4>📍 Directions (${(route.summary.totalDistance/1000).toFixed(1)} km, ${Math.round(route.summary.totalTime/60)} min)</h4>`;
+                route.instructions.forEach((instr, i) => {
+                    panel.innerHTML += `<div class="step">${i+1}. ${instr.text} (${(instr.distance/1000).toFixed(1)} km)</div>`;
+                });
+                panel.style.display = 'block';
+            }).addTo(map);
+        }
+
+        function toggleHeatmap() {
+            const btn = document.getElementById('btnHeatmap');
+            if (heatmapActive) {
+                if (heatmapLayer) map.removeLayer(heatmapLayer);
+                heatmapActive = false;
+                btn.classList.remove('active');
+                btn.textContent = '🔥 Show Heatmap';
+            } else {
+                showHeatmap();
+                heatmapActive = true;
+                btn.classList.add('active');
+                btn.textContent = '🔥 Hide Heatmap';
+            }
+        }
+        
+        function toggleMarkers() {
+            const btn = document.getElementById('btnMarkers');
+            if (markersActive) {
+                markersLayer.clearLayers();
+                markersActive = false;
+                btn.classList.remove('active');
+                btn.textContent = '📍 Show Markers';
+            } else {
+                showMarkers();
+                markersActive = true;
+                btn.classList.add('active');
+                btn.textContent = '📍 Hide Markers';
+            }
+        }
+        
+        function toggleDangerZones() {
+            const btn = document.getElementById('btnDanger');
+            if (dangerActive) {
+                dangerZonesLayer.clearLayers();
+                dangerActive = false;
+                btn.classList.remove('active');
+                btn.textContent = '⚠️ Danger Zones';
+            } else {
+                showDangerZones();
+                dangerActive = true;
+                btn.classList.add('active');
+                btn.textContent = '⚠️ Hide Danger Zones';
+            }
+        }
+        
+        function toggleSafeRoutes() {
+            const btn = document.getElementById('btnRoutes');
+            if (routesActive) {
+                safeRoutesLayer.clearLayers();
+                routesActive = false;
+                btn.classList.remove('active');
+                btn.textContent = '🛣️ Safe Routes';
+            } else {
+                showSafeRoutes();
+                routesActive = true;
+                btn.classList.add('active');
+                btn.textContent = '🛣️ Hide Safe Routes';
+            }
+        }
+
+        function showMarkers() {
+            markersLayer.clearLayers();
+            crimeData.forEach(city => {
+                const color = city.risk === 'high' ? '#dc3545' : city.risk === 'medium' ? '#ffc107' : '#28a745';
+                const marker = L.circleMarker([city.lat, city.lng], {
+                    radius: 10,
+                    fillColor: color,
+                    color: '#fff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).bindPopup(`<b>${city.name}</b><br>Crimes: ${city.crimes}<br>Risk: ${city.risk.toUpperCase()}<br><button onclick="getDirections([20.5937, 78.9629], [${city.lat}, ${city.lng}])">Get Directions</button>`);
+                markersLayer.addLayer(marker);
+                markers[city.name] = marker;
+            });
+        }
+
+        function showHeatmap() {
+            if (heatmapLayer) map.removeLayer(heatmapLayer);
+            
+            const heatData = [];
+            crimeData.forEach(city => {
+                for (let i = 0; i < city.crimes / 100; i++) {
+                    heatData.push([
+                        city.lat + (Math.random() - 0.5) * 0.5,
+                        city.lng + (Math.random() - 0.5) * 0.5,
+                        0.5
+                    ]);
+                }
+            });
+            
+            heatmapLayer = L.heatLayer(heatData, {
+                radius: 25,
+                blur: 15,
+                maxZoom: 10,
+                gradient: {0.4: 'blue', 0.6: 'yellow', 0.8: 'orange', 1.0: 'red'}
+            }).addTo(map);
+        }
+
+        function showDangerZones() {
+            dangerZonesLayer.clearLayers();
+            crimeData.filter(c => c.risk === 'high').forEach(city => {
+                const circle = L.circle([city.lat, city.lng], {
+                    color: '#dc3545',
+                    fillColor: '#dc3545',
+                    fillOpacity: 0.2,
+                    radius: 50000
+                }).bindPopup(`<b>⚠️ Danger Zone</b><br>${city.name}`);
+                dangerZonesLayer.addLayer(circle);
+            });
+        }
+
+        function showSafeRoutes() {
+            safeRoutesLayer.clearLayers();
+            const safePoints = crimeData.filter(c => c.risk === 'low' || c.risk === 'medium');
+            if (safePoints.length >= 2) {
+                const route = L.polyline(
+                    safePoints.map(p => [p.lat, p.lng]),
+                    {color: '#28a745', weight: 4, dashArray: '10, 10'}
+                );
+                safeRoutesLayer.addLayer(route);
+                route.bindPopup('<b>🛣️ Suggested Safe Route</b>');
+            }
+        }
+
+        function filterCrimes() {
+            const crimeType = document.getElementById('crimeType').value;
+            const riskLevel = document.getElementById('riskLevel').value;
+            
+            console.log('Filtering - Crime Type:', crimeType, 'Risk Level:', riskLevel);
+            
+            markersLayer.clearLayers();
+            let filtered = crimeData;
+            
+            if (riskLevel !== 'all') {
+                filtered = filtered.filter(c => c.risk === riskLevel);
+            }
+            
+            console.log('Filtered data:', filtered.length, 'cities');
+            
+            filtered.forEach(city => {
+                const color = city.risk === 'high' ? '#dc3545' : city.risk === 'medium' ? '#ffc107' : '#28a745';
+                const marker = L.circleMarker([city.lat, city.lng], {
+                    radius: 10,
+                    fillColor: color,
+                    color: '#fff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).bindPopup(`<b>${city.name}</b><br>Crimes: ${city.crimes}<br>Risk: ${city.risk.toUpperCase()}`);
+                markersLayer.addLayer(marker);
+            });
+            
+            // Update stats
+            updateStats();
+        }
+
+        // Initialize
+        updateStats();
+        showMarkers();
+        document.getElementById('btnMarkers').classList.add('active');
+        document.getElementById('btnMarkers').textContent = '📍 Hide Markers';
+    </script>
+</body>
+</html>

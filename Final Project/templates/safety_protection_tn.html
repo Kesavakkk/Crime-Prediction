@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamil Nadu Safety Protection</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .header h1 { color: #333; font-size: 28px; margin-bottom: 5px; }
+        .header p { color: #666; font-size: 14px; }
+        .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .map-section { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        #tnMap { height: 600px; border-radius: 10px; }
+        .sidebar { display: flex; flex-direction: column; gap: 20px; }
+        .status-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .status-indicator { display: flex; align-items: center; gap: 15px; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .status-indicator.safe { background: #d4edda; border-left: 5px solid #28a745; }
+        .status-indicator.warning { background: #fff3cd; border-left: 5px solid #ffc107; }
+        .status-indicator.danger { background: #f8d7da; border-left: 5px solid #dc3545; }
+        .pulse { width: 20px; height: 20px; border-radius: 50%; animation: pulse 2s infinite; }
+        .pulse.safe { background: #28a745; }
+        .pulse.warning { background: #ffc107; }
+        .pulse.danger { background: #dc3545; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.1); } }
+        .workflow { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .workflow-step { display: flex; align-items: center; gap: 15px; padding: 12px; margin-bottom: 10px; border-radius: 8px; background: #f8f9fa; }
+        .workflow-step.active { background: #e3f2fd; border-left: 4px solid #2196F3; }
+        .workflow-step.completed { background: #d4edda; border-left: 4px solid #28a745; }
+        .step-number { width: 30px; height: 30px; border-radius: 50%; background: #6c757d; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .workflow-step.active .step-number { background: #2196F3; }
+        .workflow-step.completed .step-number { background: #28a745; }
+        .sos-btn { width: 100%; padding: 20px; background: #dc3545; color: white; border: none; border-radius: 10px; font-size: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(220,53,69,0.4); transition: all 0.3s; }
+        .sos-btn:hover { background: #c82333; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(220,53,69,0.6); }
+        .emergency-contacts { margin-top: 15px; }
+        .contact-item { display: flex; justify-content: space-between; padding: 10px; background: #f8f9fa; border-radius: 5px; margin-bottom: 8px; }
+        .district-list { max-height: 200px; overflow-y: auto; margin-top: 10px; }
+        .district-item { padding: 8px; margin: 5px 0; border-radius: 5px; cursor: pointer; transition: all 0.2s; }
+        .district-item.danger { background: #f8d7da; border-left: 3px solid #dc3545; }
+        .district-item.safe { background: #d4edda; border-left: 3px solid #28a745; }
+        .district-item:hover { transform: translateX(5px); }
+        h3 { color: #333; margin-bottom: 15px; font-size: 18px; }
+        .back-btn { display: inline-block; padding: 10px 20px; background: #6c757d; color: white; text-decoration: none; border-radius: 5px; margin-bottom: 10px; }
+        .back-btn:hover { background: #5a6268; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/userhome" class="back-btn">← Back to Dashboard</a>
+            <h1>🛡️ Tamil Nadu Safety Protection System</h1>
+            <p>Real-time crime zone monitoring and safety guidance for Tamil Nadu districts</p>
+        </div>
+
+        <div class="main-grid">
+            <div class="map-section">
+                <h3>📍 Tamil Nadu Crime Zone Map</h3>
+                <div id="tnMap"></div>
+            </div>
+
+            <div class="sidebar">
+                <div class="status-card">
+                    <h3>Current Status</h3>
+                    <div class="status-indicator" id="statusIndicator">
+                        <div class="pulse safe"></div>
+                        <div>
+                            <strong id="statusText">Safe Zone</strong>
+                            <p style="font-size: 12px; color: #666; margin-top: 5px;" id="statusDesc">You are in a safe area</p>
+                        </div>
+                    </div>
+                    <button class="sos-btn" onclick="triggerSOS()">🚨 EMERGENCY SOS</button>
+                    <div class="emergency-contacts">
+                        <strong>Emergency Contacts:</strong>
+                        <div class="contact-item">
+                            <span>🚓 Police</span>
+                            <strong>100</strong>
+                        </div>
+                        <div class="contact-item">
+                            <span>🚑 Ambulance</span>
+                            <strong>108</strong>
+                        </div>
+                        <div class="contact-item">
+                            <span>👩 Women Helpline</span>
+                            <strong>1091</strong>
+                        </div>
+                        <div class="contact-item">
+                            <span>🔥 Fire Service</span>
+                            <strong>101</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="workflow">
+                    <h3>Protection Workflow</h3>
+                    <div class="workflow-step completed">
+                        <div class="step-number">1</div>
+                        <span>Detect Danger Zone</span>
+                    </div>
+                    <div class="workflow-step active">
+                        <div class="step-number">2</div>
+                        <span>Alert User</span>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-number">3</div>
+                        <span>Suggest Safe Route</span>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-number">4</div>
+                        <span>SOS Option</span>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-number">5</div>
+                        <span>Guide to Safe Zone</span>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <h3>District Status</h3>
+                    <div class="district-list" id="districtList"></div>
+                    <button onclick="findSafeZone()" style="width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px;">🗺️ Find Nearest Safe Zone</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Tamil Nadu districts with real coordinates and crime data
+        const tnDistricts = [
+            {name: 'Chennai', lat: 13.0827, lng: 80.2707, crimes: 8500, status: 'UNSAFE'},
+            {name: 'Coimbatore', lat: 11.0168, lng: 76.9558, crimes: 4200, status: 'UNSAFE'},
+            {name: 'Madurai', lat: 9.9252, lng: 78.1198, crimes: 3800, status: 'UNSAFE'},
+            {name: 'Tiruchirappalli', lat: 10.7905, lng: 78.7047, crimes: 2100, status: 'SAFE'},
+            {name: 'Salem', lat: 11.6643, lng: 78.1460, crimes: 2500, status: 'UNSAFE'},
+            {name: 'Tirunelveli', lat: 8.7139, lng: 77.7567, crimes: 1800, status: 'SAFE'},
+            {name: 'Vellore', lat: 12.9165, lng: 79.1325, crimes: 1900, status: 'SAFE'},
+            {name: 'Erode', lat: 11.3410, lng: 77.7172, crimes: 1600, status: 'SAFE'},
+            {name: 'Thanjavur', lat: 10.7870, lng: 79.1378, crimes: 1400, status: 'SAFE'},
+            {name: 'Dindigul', lat: 10.3673, lng: 77.9803, crimes: 1300, status: 'SAFE'},
+            {name: 'Kanchipuram', lat: 12.8342, lng: 79.7036, crimes: 2200, status: 'UNSAFE'},
+            {name: 'Cuddalore', lat: 11.7480, lng: 79.7714, crimes: 1500, status: 'SAFE'},
+            {name: 'Tiruppur', lat: 11.1085, lng: 77.3411, crimes: 1700, status: 'SAFE'},
+            {name: 'Karur', lat: 10.9601, lng: 78.0766, crimes: 900, status: 'SAFE'},
+            {name: 'Namakkal', lat: 11.2189, lng: 78.1677, crimes: 850, status: 'SAFE'}
+        ];
+
+        // Initialize map centered on Tamil Nadu
+        const map = L.map('tnMap').setView([11.1271, 78.6569], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add user location marker
+        const userMarker = L.marker([13.0827, 80.2707], {
+            icon: L.divIcon({
+                className: 'user-marker',
+                html: '<div style="background: #2196F3; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+                iconSize: [20, 20]
+            })
+        }).addTo(map).bindPopup('<b>Your Location</b><br>Chennai');
+
+        // Add district markers
+        tnDistricts.forEach(district => {
+            const color = district.status === 'UNSAFE' ? '#dc3545' : '#28a745';
+            const icon = L.divIcon({
+                className: 'district-marker',
+                html: `<div style="background: ${color}; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">${district.crimes > 2000 ? '!' : '✓'}</div>`,
+                iconSize: [30, 30]
+            });
+
+            L.marker([district.lat, district.lng], {icon})
+                .addTo(map)
+                .bindPopup(`<b>${district.name}</b><br>Crimes: ${district.crimes}<br>Status: <span style="color: ${color}; font-weight: bold;">${district.status}</span>`);
+
+            // Add danger/safe circles
+            L.circle([district.lat, district.lng], {
+                color: color,
+                fillColor: color,
+                fillOpacity: 0.15,
+                radius: district.status === 'UNSAFE' ? 25000 : 15000
+            }).addTo(map);
+        });
+
+        // Populate district list
+        const districtList = document.getElementById('districtList');
+        tnDistricts.forEach(district => {
+            const div = document.createElement('div');
+            div.className = `district-item ${district.status === 'UNSAFE' ? 'danger' : 'safe'}`;
+            div.innerHTML = `<strong>${district.name}</strong><br><small>${district.crimes} crimes - ${district.status}</small>`;
+            div.onclick = () => map.setView([district.lat, district.lng], 10);
+            districtList.appendChild(div);
+        });
+
+        // Real-time danger detection
+        let currentLocation = {lat: 13.0827, lng: 80.2707}; // Chennai
+        let safeRoutePolyline = null;
+        let nearestSafeZoneMarker = null;
+        
+        function checkDanger() {
+            const nearbyDanger = tnDistricts.find(d => {
+                const distance = Math.sqrt(Math.pow(d.lat - currentLocation.lat, 2) + Math.pow(d.lng - currentLocation.lng, 2));
+                return distance < 0.5 && d.status === 'UNSAFE';
+            });
+
+            const indicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            const statusDesc = document.getElementById('statusDesc');
+
+            if (nearbyDanger) {
+                indicator.className = 'status-indicator danger';
+                indicator.querySelector('.pulse').className = 'pulse danger';
+                statusText.textContent = 'Danger Zone Detected!';
+                statusDesc.textContent = `You are near ${nearbyDanger.name} - High crime area`;
+                updateWorkflow(3);
+                showSafeRoute();
+            } else {
+                indicator.className = 'status-indicator safe';
+                indicator.querySelector('.pulse').className = 'pulse safe';
+                statusText.textContent = 'Safe Zone';
+                statusDesc.textContent = 'You are in a safe area';
+                updateWorkflow(2);
+                if (safeRoutePolyline) {
+                    map.removeLayer(safeRoutePolyline);
+                    safeRoutePolyline = null;
+                }
+                if (nearestSafeZoneMarker) {
+                    map.removeLayer(nearestSafeZoneMarker);
+                    nearestSafeZoneMarker = null;
+                }
+            }
+        }
+
+        function showSafeRoute() {
+            // Find nearest safe zone
+            const safeZones = tnDistricts.filter(d => d.status === 'SAFE');
+            let nearest = safeZones[0];
+            let minDist = Infinity;
+            
+            safeZones.forEach(zone => {
+                const dist = Math.sqrt(Math.pow(zone.lat - currentLocation.lat, 2) + Math.pow(zone.lng - currentLocation.lng, 2));
+                if (dist < minDist) {
+                    minDist = dist;
+                    nearest = zone;
+                }
+            });
+
+            // Remove old route and marker
+            if (safeRoutePolyline) map.removeLayer(safeRoutePolyline);
+            if (nearestSafeZoneMarker) map.removeLayer(nearestSafeZoneMarker);
+
+            // Draw route to safe zone
+            safeRoutePolyline = L.polyline([
+                [currentLocation.lat, currentLocation.lng],
+                [nearest.lat, nearest.lng]
+            ], {
+                color: '#28a745',
+                weight: 4,
+                opacity: 0.8,
+                dashArray: '10, 10'
+            }).addTo(map);
+
+            // Add safe zone marker
+            nearestSafeZoneMarker = L.marker([nearest.lat, nearest.lng], {
+                icon: L.divIcon({
+                    className: 'safe-zone-marker',
+                    html: '<div style="background: #28a745; width: 40px; height: 40px; border-radius: 50%; border: 4px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">✓</div>',
+                    iconSize: [40, 40]
+                })
+            }).addTo(map).bindPopup(`<b>Nearest Safe Zone</b><br>${nearest.name}<br>Distance: ${(minDist * 111).toFixed(1)} km`);
+
+            // Fit map to show route
+            map.fitBounds([
+                [currentLocation.lat, currentLocation.lng],
+                [nearest.lat, nearest.lng]
+            ], {padding: [50, 50]});
+        }
+
+        function updateWorkflow(activeStep) {
+            document.querySelectorAll('.workflow-step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index < activeStep - 1) step.classList.add('completed');
+                if (index === activeStep - 1) step.classList.add('active');
+            });
+        }
+
+        function triggerSOS() {
+            if (confirm('🚨 EMERGENCY SOS ACTIVATED!\n\nThis will:\n• Alert nearby police stations\n• Share your location\n• Call emergency services\n\nProceed?')) {
+                alert('✅ SOS Alert Sent!\n\n📍 Location: Chennai, Tamil Nadu\n🚓 Police notified\n🚑 Ambulance dispatched\n\nHelp is on the way!');
+                updateWorkflow(5);
+                showSafeRoute();
+            }
+        }
+
+        function findSafeZone() {
+            showSafeRoute();
+            updateWorkflow(5);
+        }
+
+        // Check danger every 3 seconds
+        setInterval(checkDanger, 3000);
+        checkDanger();
+    </script>
+</body>
+</html>

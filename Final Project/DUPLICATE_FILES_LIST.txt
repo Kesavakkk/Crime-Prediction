@@ -1,0 +1,94 @@
+DUPLICATE FILES IN CRIME PREDICTION PROJECT
+===========================================
+
+This document lists all duplicate/unused files that can be safely deleted.
+
+TEMPLATES FOLDER (9 files):
+---------------------------
+1. area_analysis.html          -> USE: area_analysis_new.html
+2. dashboard.html              -> USE: dashboard_new.html  
+3. future_prediction.html      -> USE: future_prediction_new.html
+4. svm_predict.html            -> USE: svm_predict_new.html
+5. userhome_enhanced.html      -> NOT USED (delete)
+6. userhome_new.html           -> NOT USED (delete)
+7. visualize.html              -> USE: visualize_new.html
+8. safety_protection.html      -> NOT USED (delete)
+9. safety_protection_tn.html   -> NOT USED (delete)
+
+DATASET FOLDER (4 files):
+-------------------------
+10. enhanced_crimes.csv                    -> USE: crimes.csv
+11. imported_data_20260212_214009.csv      -> OLD IMPORT (delete)
+12. imported_data_20260225_201153.csv      -> OLD IMPORT (delete)
+13. imported_data_20260225_201312.csv      -> OLD IMPORT (delete)
+
+ROOT FOLDER (2 files):
+----------------------
+14. alert_system.py            -> USE: mock_alert_system.py
+15. safety_ml.py               -> USE: safety_classifier.py
+
+TOTAL: 15 duplicate files
+
+FILES CURRENTLY USED IN app.py:
+===============================
+Templates:
+- login.html
+- register.html
+- userhome.html
+- visualize_new.html
+- admin.html
+- statistics.html
+- history.html
+- trends.html
+- map.html
+- dashboard_new.html
+- svm_predict_new.html
+- heatmap.html
+- area_analysis_new.html
+- future_prediction_new.html
+- ml_training.html
+- api_docs.html
+- import_data.html
+- realtime_dashboard.html
+- realtime_test.html
+- profile.html
+- crime_trends.html
+- forgot_password.html
+- reset_password.html
+- advanced_analytics.html
+- nearby_hotspots.html
+- protection_dashboard.html
+- map_dashboard.html
+- protection_alert_system.html
+- dataset_info.html
+- safe_navigation_gps.html
+- safe_navigation.html
+- tn_safe_routes.html
+- alerts.html
+- model_evaluation.html
+- base.html (extended by others)
+
+Python Modules:
+- mock_alert_system.py
+- safety_classifier.py
+- women_safety_scorer.py
+- protection_engine.py
+- realtime_ml.py
+- ml_risk_predictor.py
+
+HOW TO REMOVE DUPLICATES:
+=========================
+Option 1: Run the batch file
+   - Double-click: REMOVE_DUPLICATES.bat
+
+Option 2: Manual deletion
+   - Delete the files listed above manually
+
+BACKUP RECOMMENDATION:
+=====================
+Before deleting, consider creating a backup:
+1. Copy the entire "Final Project" folder
+2. Rename it to "Final Project - Backup"
+3. Then run REMOVE_DUPLICATES.bat
+
+This ensures you can restore files if needed.

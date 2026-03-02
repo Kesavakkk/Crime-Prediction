@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Prediction - Dashboard</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: white; padding: 20px 30px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header h1 { color: #667eea; font-size: 28px; }
+        .user-info { display: flex; gap: 15px; align-items: center; }
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-block; transition: all 0.3s; }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-primary:hover { background: #5568d3; transform: translateY(-2px); }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-warning { background: #f59e0b; color: white; }
+        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .action-card { background: white; padding: 20px; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .action-card:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .action-card h3 { color: #667eea; margin-bottom: 10px; }
+        .live-indicator { display: inline-block; width: 10px; height: 10px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; margin-right: 5px; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        select, input { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 5px; font-size: 14px; margin-bottom: 15px; }
+        .results { margin-top: 20px; }
+        .state-item { padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .safe { background: #d1fae5; color: #065f46; }
+        .moderate { background: #fef3c7; color: #92400e; }
+        .unsafe { background: #fee2e2; color: #991b1b; }
+        .badge { padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 Crime Prediction System</h1>
+            <div class="user-info">
+                <span>Welcome, <strong>{{ session.username }}</strong></span>
+                <a href="/realtime-dashboard" class="btn btn-success">
+                    <span class="live-indicator"></span>Live Dashboard
+                </a>
+                <a href="/logout" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <div class="action-card" onclick="location.href='/realtime-dashboard'">
+                <h3>📊 Real-time Dashboard</h3>
+                <p>Live crime heatmap & streaming analytics</p>
+            </div>
+            <div class="action-card" onclick="showPrediction()">
+                <h3>🎯 ML Prediction</h3>
+                <p>K-means clustering analysis</p>
+            </div>
+            <div class="action-card" onclick="showAlerts()">
+                <h3>🔔 Anomaly Alerts</h3>
+                <p>Real-time crime anomaly detection</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 style="margin-bottom: 20px; color: #667eea;">Crime Zone Prediction</h2>
+            <form id="predictionForm">
+                <label>Select Crime Type:</label>
+                <select id="crimeType" name="crime_type">
+                    <option value="MURDER">Murder</option>
+                    <option value="RAPE">Rape</option>
+                    <option value="KIDNAPPING">Kidnapping</option>
+                    <option value="ROBBERY">Robbery</option>
+                    <option value="THEFT">Theft</option>
+                    <option value="ALL">All Crimes</option>
+                </select>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Predict Crime Zones</button>
+            </form>
+            <div id="results" class="results"></div>
+        </div>
+
+        <div class="card" id="alertsCard" style="display: none;">
+            <h2 style="margin-bottom: 20px; color: #ef4444;">🔔 Active Anomaly Alerts</h2>
+            <div id="alertsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+
+        socket.on('ml_prediction_result', (data) => {
+            console.log('Prediction received:', data);
+        });
+
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>Loading predictions...</p>';
+
+            try {
+                const response = await fetch('/api/predict-realtime', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({state: 'ALL'})
+                });
+                const data = await response.json();
+                
+                resultsDiv.innerHTML = `
+                    <h3>Prediction Results</h3>
+                    <p><strong>Total Crimes:</strong> ${data.stats.total_crimes.toLocaleString()}</p>
+                    <p><strong>Unsafe States:</strong> ${data.stats.unsafe_states}</p>
+                    <p><strong>Safe States:</strong> ${data.stats.safe_states}</p>
+                    <p style="margin-top: 15px;"><a href="/realtime-dashboard" class="btn btn-primary">View Full Dashboard</a></p>
+                `;
+            } catch (error) {
+                resultsDiv.innerHTML = '<p style="color: red;">Error loading predictions</p>';
+            }
+        });
+
+        async function showAlerts() {
+            const card = document.getElementById('alertsCard');
+            const container = document.getElementById('alertsContainer');
+            card.style.display = 'block';
+            container.innerHTML = '<p>Loading alerts...</p>';
+
+            try {
+                const response = await fetch('/api/anomalies');
+                const data = await response.json();
+                
+                if (data.alerts.length === 0) {
+                    container.innerHTML = '<p>No anomalies detected</p>';
+                } else {
+                    container.innerHTML = data.alerts.map(alert => `
+                        <div class="state-item unsafe">
+                            <div>
+                                <strong>${alert.state}</strong><br>
+                                <small>${alert.message}</small>
+                            </div>
+                            <span class="badge" style="background: #ef4444; color: white;">${alert.severity}</span>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                container.innerHTML = '<p style="color: red;">Error loading alerts</p>';
+            }
+        }
+
+        function showPrediction() {
+            document.getElementById('predictionForm').scrollIntoView({behavior: 'smooth'});
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Prediction System - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        body.light-mode {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+        }
+        
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        body.dark-mode .navbar {
+            background: #0f3460;
+        }
+        
+        .navbar h1 {
+            color: #667eea;
+            font-size: 24px;
+        }
+        
+        body.dark-mode .navbar h1 {
+            color: #64ffda;
+        }
+        
+        .navbar .user-info {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        body.dark-mode .navbar .user-info {
+            color: #b0b0b0;
+        }
+        
+        .navbar .logout-btn {
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .navbar .logout-btn:hover {
+            background: #764ba2;
+        }
+        
+        .theme-toggle {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            font-size: 14px;
+        }
+        
+        .theme-toggle:hover {
+            background: #764ba2;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        body.dark-mode .card {
+            background: #0f3460;
+        }
+        
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        body.dark-mode .card h2 {
+            color: #64ffda;
+        }
+        
+        .card p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        body.dark-mode .card p {
+            color: #b0b0b0;
+        }
+        
+        .btn-predict {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn-predict:hover {
+            transform: translateY(-2px);
+        }
+        
+        .results-section {
+            margin-top: 30px;
+        }
+        
+        .results-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        body.dark-mode .results-section h3 {
+            color: #64ffda;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        body.dark-mode table td {
+            color: #e0e0e0;
+            border-bottom: 1px solid #1a1a2e;
+        }
+        
+        table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        body.dark-mode table tbody tr:hover {
+            background-color: #16213e;
+        }
+        
+        .status-safe {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .status-unsafe {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-box .number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-box .label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="navbar">
+        <h1>Crime Prediction System</h1>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+            <a href="/profile" style="background:#6610f2; color:white; padding:8px 16px; border-radius:5px; text-decoration:none; font-weight:600;">👤 Profile</a>
+            <a href="/realtime-dashboard" style="background:#dc3545; color:white; padding:8px 16px; border-radius:5px; text-decoration:none; font-weight:600; box-shadow: 0 0 10px rgba(220,53,69,0.5);">
+                <span style="display:inline-block; width:8px; height:8px; background:#fff; border-radius:50%; margin-right:5px; animation: blink 1s infinite;"></span>
+                Live Updates
+            </a>
+            <a href="/crime-trends" style="background:#28a745; color:white; padding:8px 16px; border-radius:5px; text-decoration:none; font-weight:600;">📈 Trends</a>
+            <a href="/safe-navigation" style="background:#28a745; color:white; padding:8px 16px; border-radius:5px; text-decoration:none; font-weight:600;">🗺️ Navigation</a>
+            <a href="/dashboard" style="background:#17a2b8; color:white; padding:8px 16px; border-radius:5px; text-decoration:none; font-weight:600;">Dashboard</a>
+            <a href="/heatmap" style="background:#fd7e14; color:white; padding:8px 16px; border-radius:5px; text-decoration:none; font-weight:600;">Heatmap</a>
+            <div class="user-info">
+                Welcome, <strong>{{ session.username }}</strong>
+            </div>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <h2>Crime Zone Prediction</h2>
+            <p>Click the button below to analyze crime patterns across Indian states and identify unsafe zones based on historical crime data.</p>
+            
+            <form method="post">
+                <label for="crime_type" style="display:block; margin-bottom:8px; font-weight:600; color:#333;">Select Crime Type:</label>
+                <select name="crime_type" id="crime_type" style="width:100%; padding:10px; margin-bottom:20px; border:1px solid #ddd; border-radius:5px;">
+                    <option value="Total" {% if selected_crime == 'Total' %}selected{% endif %}>Total Crimes</option>
+                    {% for c_type in crime_types %}
+                    <option value="{{ c_type }}" {% if selected_crime == c_type %}selected{% endif %}>{{ c_type }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn-predict">Predict Crime Zones</button>
+                <a href="/visualize" class="btn-predict" style="display:inline-block; text-decoration:none; margin-left:10px; background:#28a745;">View Charts</a>
+            </form>
+            
+            {% if result %}
+                <div class="results-section">
+                    <h3>Prediction Results</h3>
+                    
+                    <div style="margin-bottom:15px;">
+                        <a href="/export/csv" style="background:#28a745; color:white; padding:8px 16px; border-radius:5px; text-decoration:none; margin-right:10px;">Export CSV</a>
+                        <a href="/export/json" style="background:#17a2b8; color:white; padding:8px 16px; border-radius:5px; text-decoration:none;">Export JSON</a>
+                    </div>
+                    
+                    {% set safe_count = result | selectattr('1', 'equalto', 'SAFE') | list | length %}
+                    {% set unsafe_count = result | selectattr('1', 'equalto', 'UNSAFE') | list | length %}
+                    
+                    <div class="stats">
+                        <div class="stat-box">
+                            <div class="number">{{ safe_count }}</div>
+                            <div class="label">Safe States</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="number">{{ unsafe_count }}</div>
+                            <div class="label">High Crime States</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="number">{{ result | length }}</div>
+                            <div class="label">Total Analyzed</div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>State/UT</th>
+                                    <th>Safety Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for r in result %}
+                                <tr>
+                                    <td>{{ r[0] }}</td>
+                                    <td>
+                                        {% if r[1] == 'SAFE' %}
+                                            <span class="status-safe">{{ r[1] }}</span>
+                                        {% else %}
+                                            <span class="status-unsafe">{{ r[1] }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>No predictions yet. Click "Predict Crime Zones" to analyze the data.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script>
+        // Session timeout warning
+        let sessionTimeout = 3600; // 1 hour
+        let warningTime = 300; // 5 minutes
+        let warningShown = false;
+        
+        function checkSession() {
+            fetch('/session-status')
+                .then(r => r.json())
+                .then(data => {
+                    if (!data.logged_in) {
+                        window.location.href = '/';
+                    }
+                });
+        }
+        
+        function showSessionWarning() {
+            if (!warningShown) {
+                warningShown = true;
+                if (confirm('⚠️ Your session will expire in 5 minutes. Click OK to stay logged in.')) {
+                    fetch('/userhome').then(() => {
+                        warningShown = false;
+                        setTimeout(showSessionWarning, (sessionTimeout - warningTime) * 1000);
+                    });
+                }
+            }
+        }
+        
+        // Check session every minute
+        setInterval(checkSession, 60000);
+        
+        // Show warning 5 minutes before timeout
+        setTimeout(showSessionWarning, (sessionTimeout - warningTime) * 1000);
+        
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.querySelector('.theme-toggle');
+            
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                btn.textContent = '☀️ Light';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                btn.textContent = '🌙 Dark';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // Load saved theme
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const body = document.body;
+            const btn = document.querySelector('.theme-toggle');
+            
+            if (savedTheme === 'dark') {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                btn.textContent = '☀️ Light';
+            }
+        });
+    </script>
+</body>
+</html>

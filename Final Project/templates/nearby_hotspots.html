@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearby Crime Hotspots</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .navbar h1 { color: #667eea; font-size: 24px; }
+        .btn { background: #667eea; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .hotspot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .hotspot-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #dc3545;
+        }
+        .hotspot-card.medium { border-left-color: #ffc107; }
+        .hotspot-card h3 { color: #333; margin-bottom: 15px; }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .info-row .label { color: #666; }
+        .info-row .value { font-weight: bold; color: #333; }
+        .risk-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .risk-high { background: #dc3545; color: white; }
+        .risk-medium { background: #ffc107; color: #333; }
+        @media (max-width: 768px) {
+            .hotspot-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>📍 Nearby Crime Hotspots</h1>
+        <a href="/userhome" class="btn">← Back</a>
+    </div>
+    
+    <div class="container">
+        <div class="hotspot-grid">
+            {% for hotspot in hotspots %}
+            <div class="hotspot-card {% if hotspot.risk_level == 'Medium' %}medium{% endif %}">
+                <h3>🚨 {{ hotspot.state }}</h3>
+                <div class="info-row">
+                    <span class="label">Total Crimes:</span>
+                    <span class="value">{{ hotspot.total_crimes }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Distance:</span>
+                    <span class="value">{{ hotspot.distance }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Risk Level:</span>
+                    <span class="risk-badge {% if hotspot.risk_level == 'High' %}risk-high{% else %}risk-medium{% endif %}">
+                        {{ hotspot.risk_level }}
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

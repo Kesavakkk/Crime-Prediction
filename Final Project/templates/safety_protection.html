@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety Protection</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .navbar h1 { color: #667eea; font-size: 24px; }
+        .navbar a { background: #667eea; color: white; padding: 8px 20px; border-radius: 5px; text-decoration: none; font-weight: 600; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .card h2 { color: #333; margin-bottom: 15px; font-size: 18px; }
+        #map { height: 500px; border-radius: 8px; }
+        .status-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .status-safe { background: #d4edda; color: #155724; }
+        .status-warning { background: #fff3cd; color: #856404; }
+        .status-danger { background: #f8d7da; color: #721c24; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: scale(1.02); }
+        .btn-sos { background: #dc3545; color: white; font-size: 20px; }
+        .btn-route { background: #28a745; color: white; }
+        .btn-safezone { background: #17a2b8; color: white; }
+        .workflow-step {
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .workflow-step.active { background: #d4edda; border-color: #28a745; }
+        .workflow-step.completed { opacity: 0.6; }
+        .contacts { list-style: none; }
+        .contacts li {
+            padding: 10px;
+            background: #f8f9fa;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .contacts button { background: #667eea; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🛡️ Safety Protection System</h1>
+        <div>
+            <a href="/userhome">Dashboard</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="grid">
+            <div>
+                <div class="card">
+                    <h2>Current Status</h2>
+                    <div id="statusBox" class="status-box status-safe">
+                        ✅ You are in a SAFE zone
+                    </div>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
+                        <strong>Location:</strong> <span id="currentLocation">Detecting...</span><br>
+                        <strong>Risk Level:</strong> <span id="riskLevel">Low</span>
+                    </p>
+                </div>
+                
+                <div class="card" style="margin-top: 20px;">
+                    <h2>Protection Workflow</h2>
+                    <div class="workflow-step" id="step1">
+                        <strong>1. Detect Danger</strong><br>
+                        <small>Monitoring your location...</small>
+                    </div>
+                    <div class="workflow-step" id="step2">
+                        <strong>2. Alert User</strong><br>
+                        <small>Send notification if danger detected</small>
+                    </div>
+                    <div class="workflow-step" id="step3">
+                        <strong>3. Suggest Safe Route</strong><br>
+                        <small>Calculate alternative path</small>
+                    </div>
+                    <div class="workflow-step" id="step4">
+                        <strong>4. SOS Option</strong><br>
+                        <small>Emergency contacts ready</small>
+                    </div>
+                    <div class="workflow-step" id="step5">
+                        <strong>5. Guide to Safe Zone</strong><br>
+                        <small>Navigate to nearest safe area</small>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 20px;">
+                    <h2>Emergency Actions</h2>
+                    <button class="btn btn-sos" onclick="triggerSOS()">🚨 SOS - EMERGENCY</button>
+                    <button class="btn btn-route" onclick="showSafeRoute()">🛣️ Show Safe Route</button>
+                    <button class="btn btn-safezone" onclick="findSafeZone()">📍 Find Safe Zone</button>
+                </div>
+                
+                <div class="card" style="margin-top: 20px;">
+                    <h2>Emergency Contacts</h2>
+                    <ul class="contacts">
+                        <li>
+                            <span>👮 Police: 100</span>
+                            <button onclick="callEmergency('100')">Call</button>
+                        </li>
+                        <li>
+                            <span>🚑 Ambulance: 108</span>
+                            <button onclick="callEmergency('108')">Call</button>
+                        </li>
+                        <li>
+                            <span>👩 Women Helpline: 1091</span>
+                            <button onclick="callEmergency('1091')">Call</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Live Safety Map</h2>
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([28.6139, 77.2090], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        
+        let userMarker, safeZoneMarker, routeLine;
+        let currentLat = 28.6139, currentLng = 77.2090;
+        
+        // Simulate user location
+        userMarker = L.marker([currentLat, currentLng], {
+            icon: L.divIcon({
+                className: 'user-marker',
+                html: '<div style="background:#667eea; width:20px; height:20px; border-radius:50%; border:3px solid white;"></div>'
+            })
+        }).addTo(map).bindPopup('Your Location');
+        
+        // Danger zones (red)
+        const dangerZones = [
+            {lat: 28.6239, lng: 77.2190, name: 'High Crime Area'},
+            {lat: 28.6039, lng: 77.1990, name: 'Unsafe Zone'}
+        ];
+        
+        dangerZones.forEach(zone => {
+            L.circle([zone.lat, zone.lng], {
+                radius: 500,
+                color: '#dc3545',
+                fillColor: '#dc3545',
+                fillOpacity: 0.3
+            }).addTo(map).bindPopup(`⚠️ ${zone.name}`);
+        });
+        
+        // Safe zones (green)
+        const safeZones = [
+            {lat: 28.6339, lng: 77.2290, name: 'Police Station'},
+            {lat: 28.5939, lng: 77.1890, name: 'Safe Area'}
+        ];
+        
+        safeZones.forEach(zone => {
+            L.circle([zone.lat, zone.lng], {
+                radius: 300,
+                color: '#28a745',
+                fillColor: '#28a745',
+                fillOpacity: 0.3
+            }).addTo(map).bindPopup(`✅ ${zone.name}`);
+        });
+        
+        function detectDanger() {
+            const distance = Math.sqrt(Math.pow(currentLat - 28.6239, 2) + Math.pow(currentLng - 77.2190, 2));
+            
+            if (distance < 0.01) {
+                document.getElementById('statusBox').className = 'status-box status-danger';
+                document.getElementById('statusBox').innerHTML = '⚠️ DANGER DETECTED!';
+                document.getElementById('riskLevel').textContent = 'High';
+                activateWorkflow();
+            } else if (distance < 0.02) {
+                document.getElementById('statusBox').className = 'status-box status-warning';
+                document.getElementById('statusBox').innerHTML = '⚡ Approaching unsafe area';
+                document.getElementById('riskLevel').textContent = 'Medium';
+            }
+        }
+        
+        function activateWorkflow() {
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('step2').classList.add('active');
+            
+            setTimeout(() => {
+                alert('⚠️ DANGER ALERT!\n\nYou are entering a high-crime zone.\nSafe route is being calculated...');
+                document.getElementById('step2').classList.add('completed');
+                document.getElementById('step3').classList.add('active');
+                showSafeRoute();
+            }, 1000);
+        }
+        
+        function showSafeRoute() {
+            if (routeLine) map.removeLayer(routeLine);
+            
+            const safeLat = 28.6339, safeLng = 77.2290;
+            routeLine = L.polyline([
+                [currentLat, currentLng],
+                [28.6189, 77.2140],
+                [28.6289, 77.2240],
+                [safeLat, safeLng]
+            ], {color: '#28a745', weight: 4, dashArray: '10, 10'}).addTo(map);
+            
+            map.fitBounds(routeLine.getBounds());
+            document.getElementById('step3').classList.add('completed');
+            document.getElementById('step4').classList.add('active');
+            alert('✅ Safe route calculated!\n\nFollow the green path to reach safety.');
+        }
+        
+        function findSafeZone() {
+            const safeLat = 28.6339, safeLng = 77.2290;
+            
+            if (safeZoneMarker) map.removeLayer(safeZoneMarker);
+            safeZoneMarker = L.marker([safeLat, safeLng], {
+                icon: L.divIcon({
+                    className: 'safe-marker',
+                    html: '<div style="background:#28a745; width:30px; height:30px; border-radius:50%; border:3px solid white; display:flex; align-items:center; justify-content:center; color:white; font-size:18px;">✓</div>'
+                })
+            }).addTo(map).bindPopup('🛡️ Safe Zone - Police Station<br>Distance: 1.2 km').openPopup();
+            
+            map.setView([safeLat, safeLng], 14);
+            document.getElementById('step5').classList.add('active');
+            alert('📍 Nearest safe zone found!\n\nPolice Station - 1.2 km away\nEstimated time: 15 minutes');
+        }
+        
+        function triggerSOS() {
+            document.getElementById('step4').classList.add('completed');
+            const confirmed = confirm('🚨 EMERGENCY SOS\n\nThis will:\n✓ Alert emergency contacts\n✓ Share your location\n✓ Call police (100)\n\nProceed?');
+            
+            if (confirmed) {
+                alert('✅ SOS ACTIVATED!\n\n• Emergency contacts notified\n• Location shared: 28.6139, 77.2090\n• Police dispatch requested\n• Stay calm, help is on the way');
+                document.getElementById('statusBox').innerHTML = '🚨 SOS ACTIVE - Help Coming';
+            }
+        }
+        
+        function callEmergency(number) {
+            alert(`📞 Calling ${number}...\n\nIn a real app, this would dial the emergency number.`);
+        }
+        
+        // Update location
+        document.getElementById('currentLocation').textContent = 'Delhi, India';
+        
+        // Simulate danger detection
+        setInterval(detectDanger, 3000);
+    </script>
+</body>
+</html>

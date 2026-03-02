@@ -1,0 +1,1066 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>Home | National Crime Records Bureau</title>
+
+    <!-- Favicon -->
+
+    <link rel="apple-touch-icon" sizes="57x57" href="https://www.ncrb.gov.in/static/dist/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://www.ncrb.gov.in/static/dist/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://www.ncrb.gov.in/static/dist/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://www.ncrb.gov.in/static/dist/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://www.ncrb.gov.in/static/dist/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://www.ncrb.gov.in/static/dist/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="https://www.ncrb.gov.in/static/dist/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://www.ncrb.gov.in/static/dist/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.ncrb.gov.in/static/dist/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://www.ncrb.gov.in/static/dist/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.ncrb.gov.in/static/dist/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="https://www.ncrb.gov.in/static/dist/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.ncrb.gov.in/static/dist/favicon/favicon-16x16.png">
+
+    <link rel="manifest" href="https://www.ncrb.gov.in/static/dist/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="https://www.ncrb.gov.in/static/dist/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+
+            <link type="text/css" rel="stylesheet" href="https://www.ncrb.gov.in/static/dist/deploy/app.min.css?rel=20231028004" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Source+Sans+Pro:wght@200;300;400;600;700;900&display=swap" rel="stylesheet"> -->
+   
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=
+    Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Source+Sans
+    +Pro:wght@200;300;400;600;700;900&display=swap" integrity="sha384-U2n9
+    aiPOz3scQNF26uhokJnaRqkG/k891NW57ZQX7Pw2h6z1MXNnqXxap93NbsFn" crossori
+    gin="anonymous">
+    
+   
+
+ 
+   
+    <meta name="title" content="NationalCrimeRecordsBureau">
+<meta id="keywords" name="keywords" content="NationalCrimeRecordsBureau">
+<meta name="description" content="NationalCrimeRecordsBureau">
+<meta name="csrf-param" content="_csrf">
+<meta name="csrf-token" content="keYMdWenm4Ji5dezMSrgws1qZIYtSyNYiMAi-Yt4XC_Qvj0HCMDa3RWThsl4cNSlgw4WskM-aCvDug--2BcqSw==">
+
+<style> .c-genriccontent .bulletpoint  ul {
+  margin-bottom:20px;	
+ }
+.app-footer__map-iframe figure.media {
+width:100%;
+margin-bottom:0;
+}
+.c-gallery__gallerywrap-item .galleryPostWrap {
+display:none;	
+}
+
+.footer-links .link .ml-2 {
+	display:inline-block;
+	margin-left:5px;
+}
+
+.fas {
+	font-size:0px;
+}
+.fas:before {
+font-size:14px;	
+}
+.table-head {
+	    font-size: 1.25rem;
+	color: #194355;
+	font-family: "Open Sans",sans-serif;
+    font-weight: 700;
+}
+ 
+ .c-genriccontent .bulletpoint ul li {
+  position:relative;
+   line-height:1.5;
+   padding-left:22px;
+   margin-bottom:15px;
+   text-align:justify;
+   font-family:"Open Sans",sans-serif;
+   font-weight:400;
+   font-size:0.875rem;
+ }
+ .c-genriccontent .bulletpoint ul li:after {
+  position:absolute;
+   content : "\f00c";
+   font-family: "Font Awesome 5 Free";
+   font-weight:900;
+   left:0px;
+   top:0px;
+   display:block;
+   color:var(--themeClr);
+   
+ }
+ .c-genriccontent .bulletpoint.design2 ul li:after{
+   content : "\f101";
+ }
+ 
+ /* ------------------------------------------------------------
+   Page Styles
+ ------------------------------------------------------------ */
+ /* -------- Top Level --------- */
+ .primaryNav {
+   clear: both;
+   width: 100%;
+   margin-top: 5em;
+ }
+ .primaryNav #home {
+   position: absolute;
+   margin-top: -4em;
+   margin-bottom: 0;
+   min-width: 11.5em;
+   width: 100%;
+ }
+ 
+ .primaryNav #home:before {
+   display: none;
+ }
+ .primaryNav ul {
+   display: flex;
+   flex-wrap: wrap;
+   list-style: none;
+   position: relative;
+ }
+ .primaryNav li {
+   flex: 1;
+   flex-basis: 11.5em;
+   padding-right: 1.25em;
+   position: relative;
+ }
+ .primaryNav li a {
+   margin: 0;
+   padding: 0.875em 0.9375em 0.9375em 0.9375em;
+   display: block;
+   font-size: 0.9375em;
+   font-family: "PoppinsRegular", Arial, sans-serif;
+   color: white;
+   background: #6b76b4;
+   border: 1px solid rgba(0, 0, 0, 0.025);
+   box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.15);
+   text-decoration: none;
+   position: relative;
+   z-index: 102;
+ }
+ .primaryNav li a:hover {
+   background-color: #5763a6;
+ }
+ .primaryNav > ul > li {
+   margin-top: 3em;
+ }
+ .primaryNav a:link:after,
+ .primaryNav a:visited:after {
+   content: " " attr(href) " ";
+   display: block;
+   font-weight: 600;
+   font-size: 0.75em;
+   margin-top: 0.25em;
+   word-wrap: break-word;
+   color: rgba(255, 255, 255, 0.75);
+ }
+ 
+ .utilityNav a:link:after,
+ .utilityNav a:visited:after {
+   content: " " attr(href) " ";
+   display: block;
+   font-weight: 600;
+   font-size: 0.75em;
+   margin-top: 0.25em;
+   word-wrap: break-word;
+   color: rgba(255, 255, 255, 0.75);
+ }
+ 
+ /* -------- Second Level --------- */
+ .primaryNav ul ul {
+   display: block;
+ }
+ .primaryNav ul ul li {
+   padding-top: 0.6875em;
+   padding-right: 0;
+ }
+ .primaryNav ul ul li a {
+   background-color: #595959;
+ }
+ .primaryNav ul ul li a:hover {
+   background-color: #494848;
+ }
+ .primaryNav ul ul li:first-child {
+   padding-top: 2em;
+ }
+ .primaryNav ul ul ul {
+   margin-top: 0.6em;
+   padding-top: 0.6em;
+   padding-bottom: 0.625em;
+ }
+ .primaryNav ul ul ul li {
+   padding-top: 0.3125em;
+   padding-bottom: 0.3125em;
+ }
+ .primaryNav ul ul ul li a {
+   background-color: #ff9d00;
+   font-size: 0.75em;
+   padding: 0.75em;
+   width: 90%;
+   margin-right: 0;
+   margin-left: auto;
+ }
+ .primaryNav ul ul ul li a:hover {
+   background-color: #ff831b;
+ }
+ .primaryNav ul ul ul li:first-child {
+   padding-top: 1em;
+ }
+ .primaryNav ul ul ul li a:link:after,
+ .primaryNav ul ul ul li a:visited:after {
+   font-size: 0.75em;
+ }
+ .primaryNav ul ul ul ul {
+   margin-top: 0;
+   padding-top: 0.3125em;
+   padding-bottom: 0.3125em;
+ }
+ .primaryNav ul ul ul ul li a {
+   background-color: #de003a;
+   padding: 0.75em;
+   width: 80%;
+ }
+ .primaryNav ul ul ul ul li a:hover {
+   background-color: #c20035;
+ }
+ .primaryNav ul ul ul ul li a:link:after,
+ .primaryNav ul ul ul ul li a:visited:after {
+   display: none;
+ }
+ .primaryNav ul:before,
+ .primaryNav ul:after {
+   display: block;
+   content: "";
+   position: absolute;
+   border-width: 0;
+   border-color: #194355;
+   border-style: solid;
+   z-index: -1;
+   /* border-color: red; */
+ }
+ .primaryNav ul li:before,
+ .primaryNav ul li:after {
+   display: block;
+   content: "";
+   position: absolute;
+   border-width: 0;
+   border-color: #194355;
+   border-style: solid;
+   z-index: 100;
+   /* border-color: red; */
+ }
+ .primaryNav ul ul li:after {
+   width: 50%;
+   height: 0.6875em;
+   top: 0;
+   right: 1px;
+   border-left-width: 2px;
+   /* border-color: red */
+ }
+ .primaryNav ul ul li:first-child:before {
+   width: 50%;
+   height: 1.3125em;
+   top: 0.6875em;
+   right: 1px;
+   border-left-width: 2px;
+   /* border-color: red; */
+ }
+ .primaryNav ul ul ul li:before {
+   width: calc(50% - 5px) !important;
+   height: calc(100% - 2px);
+   top: -50%;
+   left: 0;
+   border-left-width: 2px;
+   border-bottom-width: 2px;
+   /* border-color: red; */
+ }
+ .primaryNav ul ul ul li:first-child:before {
+   height: 2.125em;
+   top: -1px;
+   border-top-width: 2px;
+   /* border-color: red; */
+ }
+ .primaryNav ul ul ul:before {
+   width: 50%;
+   height: 1.25em;
+   top: -10px;
+   right: 1px;
+   border-left-width: 2px;
+   z-index: 5;
+   /* border-color: red; */
+ }
+ .primaryNav ul ul ul li:after {
+   border-width: 0;
+ }
+ .primaryNav ul ul ul ul li:before,
+ .primaryNav ul ul ul ul li:first-child:before {
+   display: none;
+ }
+ .primaryNav ul ul ul ul:before {
+   width: 1px;
+   height: calc(100% + 2.5em);
+   top: -2.5em;
+   left: 0;
+   border-left-width: 2px;
+   /* border-color: red; */
+ }
+ .primaryNav > ul > li:before {
+   height: 1.375em;
+   top: -1.375em;
+   right: calc(50% + 0.625em);
+   width: calc(100% + 75px);
+   border-top-width: 2px;
+   border-right-width: 2px;
+   z-index: 100;
+   /* border-color: red; */
+ }
+ .primaryNav > ul > li:first-child + li:before {
+   border-top-width: 0;
+   height: 5em;
+   top: -5em;
+   /* border-color: red; */
+ }
+ .primaryNav > ul > li:last-child:after {
+   border-bottom-width: 0;
+ }
+ 
+ /* -------- Third Level --------- */
+ /* --------	Fourth Level --------- */
+ /* ------------------------------------------------------------
+   Connecting Lines:
+   Uncomment 'border-color: red' for debugging
+ ------------------------------------------------------------ */
+ /* ------------------------------------------------------------
+   Utility Navigation
+ ------------------------------------------------------------ */
+ .utilityNav {
+   float: right;
+   margin-top: 0;
+   margin-bottom: -0.25em;
+   margin-right: 1.25em;
+   max-width: 48%;
+   list-style-type: none;
+ }
+ .utilityNav li {
+   padding: 0 0 0.625em 0.625em;
+   display: inline-block;
+ }
+ .utilityNav li a {
+   display: block;
+   font-size: 0.75em;
+   font-weight: 700;
+   padding: 0.75em 1em;
+   font-weight: bold;
+   text-align: left;
+   color: white;
+   background-color: #6b76b4;
+   border: 1px solid rgba(0, 0, 0, 0.025);
+   box-shadow: 0px 2px 0 rgba(0, 0, 0, 0.15);
+   text-decoration: none;
+ }
+ .utilityNav li a:hover {
+   background-color: #ff831b;
+ }
+ .utilityNav li a:link:after,
+ .utilityNav li a:visited:after {
+   color: rgba(255, 255, 255, 0.75);
+   font-size: 0.75em;
+   font-weight: 600;
+   margin-top: 0.25em;
+ }
+
+
+.g-elem_60-xs.g-elem_60--design2.withBorder .g-elem_60__grid__list, .g-elem_60-xs.g-elem_60--design2.withBorder .g-elem_60__grid__list:nth-child(3n) {
+-webkit-justify-content: left !important;
+    -moz-justify-content: left !important;
+    -ms-justify-content: left !important;
+    justify-content: left !important;
+    -ms-flex-pack: left !important;	
+}
+.g-elem_60-xs.g-elem_60--design2.withBorder .g-elem_60__grid__list__container  {
+ width:100% !important;	
+max-width: 100% !important;
+	padding-left:20px;
+	padding-right:20px;
+}
+
+.g-elem_60-xs.g-elem_60--design2.withBorder .g-elem_60__grid__items__action {
+     left: auto !important;	
+}
+ 
+ /* ------------------------------------------------------------
+   Responsive Styles
+ ------------------------------------------------------------ */
+ @media screen and (max-width: 30em) {
+   .primaryNav ul {
+     display: block;
+   }
+   .primaryNav li {
+     width: 100%;
+     padding-right: 0;
+   }
+   .primaryNav #home {
+     width: 100%;
+     position: relative;
+     margin-bottom: -1em;
+     margin-top: 0;
+   }
+ 
+   .utilityNav {
+     float: none;
+     display: block;
+     width: 100%;
+     text-align: right;
+     margin-bottom: 2.5em;
+     max-width: 100%;
+   }
+ }
+ .c-layout__wrapper {
+	 max-width:1290px;
+	 width:auto;
+	 margin:auto;
+ }
+.c-layout__wrapper-head {
+	margin-top:50px;
+    text-transform: uppercase;
+}
+
+ .c-layout__wrapper-head h2 {
+ color:#194355;
+ text-align:center;
+}
+ul.c-common__list-grid .c-common__list-item  .c-common__list-link  {
+	color:#194355;
+}
+.themeRed  .c-layout__wrapper-head h2, .themeRed ul.c-common__list-grid .c-common__list-item  .c-common__list-link {
+	color:#ed1b24;
+}
+.themeGreen .c-layout__wrapper-head h2, .themeGreen ul.c-common__list-grid .c-common__list-item  .c-common__list-link {
+	color:#23b14d;
+}
+ul.c-common__list-grid {
+ width:100%;
+ padding-bottom:30px;
+}
+ul.c-common__list-grid .c-common__list-item {
+    border-top:1px #ccc dotted;
+	display:flex;
+	flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+	padding-top:6px;
+	padding-bottom:6px;
+}
+ul.c-common__list-grid .c-common__list-item .c-common__list-content h4 {
+ font-size:18px;
+ font-weight:bold;
+}
+ul.c-common__list-grid .c-common__list-item:nth-child(1) {
+ border:none;	
+}
+
+
+table.previous-year td {
+    text-align:center;
+	vertical-align: middle;
+} 
+table.previous-year td a {
+	text-decoration:underline;
+}
+
+.c-homeslider figure {
+ height:520px;
+ overflow:hidden;
+}
+.c-homeslider figure img {
+ object-fit:fill;
+	width:100%;
+	height:520px;
+}
+ </style>    
+     <style>
+        .c-homeslider figure {
+            height: 100% !important;
+           
+        }
+ 
+        .c-homeslider figure img {
+            height: 100% !important;
+        }
+        
+        .owl-dots {
+          display: flex !important;
+          justify-content: center !important;
+        }
+
+        .owl-dots .owl-dot {
+          display: none !important;
+        }
+
+        .owl-dots .owl-dot:nth-child(1),
+        .owl-dots .owl-dot:nth-child(2),
+        .owl-dots .owl-dot:nth-child(3)
+        {
+            display: inline-block !important;
+        }
+    </style>
+  
+   <!-- <link rel="stylesheet" href="https://www.ncrb.gov.in/static/dist/js-vendors/bootstrap/bootstrap.min.css"> -->
+    
+</head>
+
+<body class="">
+        <div class=" main-container">
+        <header class="app-header app-header-xs">
+    <div class="app-header__top">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-5">
+                    <div class="app-header__top__main">
+                        <aside class="link-group">
+                            <a class="links links-right" href="https://www.india.gov.in/" target="_blank">
+                                <span>भारत सरकार</span>
+                                GOVERNMENT OF INDIA
+                            </a>
+                            <a class="links" href="https://www.mha.gov.in/"  target="_blank">
+                                <span>गृह मंत्रालय</span>
+                                Ministry of Home Affairs
+                            </a>
+                        </aside>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-7 d-flex justify-content-md-end app-header__top__info">
+                    <div class="app-header__top__box">
+                        <div class="theme-option">
+                            <a href="javascript:;" class="option-green js_themeClr" data-color="themeGreen"></a>
+                            <a href="javascript:;" class="option-red js_themeClr" data-color="themeRed"></a>
+                            <a href="javascript:;" class="option-blue js_themeClr" data-color="blue"></a>
+                        </div>
+                        <div class="content-section d-flex align-items-center">
+                            <div class="content-section__area d-flex align-items-center">
+                                <div class="nav-only d-none d-lg-flex">
+                                  <!-- <a target="_blank" href="/admin/auth/login">Login</a> -->
+                                    <a  href="#main-content">Skip to main content</a>
+                                </div>
+                                <div class="additional-iconic-wrap dropdown d-none d-lg-flex align-items-center">
+                                    <div class="icon" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="https://www.ncrb.gov.in/static/dist/images/icons/ico-accessibility.png" alt="icon" class="img-fluid" />
+                                    </div>
+                                    <ul class="dropdown-menu min-widthAuto" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item js-fontIncrease" href="#">T+</a></li>
+                                        <li><a class="dropdown-item js-fontDefault" href="#">T</a></li>
+                                        <li><a class="dropdown-item js-fontDecrease" href="#">T-</a></li>
+                                    </ul>
+                                </div>
+                                <div class="additional-iconic-wrap dropdown d-none d-lg-flex align-items-center">
+                                    <div class="icon" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="https://www.ncrb.gov.in/static/dist/images/icons/ico-social.png" alt="icon" class="img-fluid" />
+                                    </div>
+                                    <ul class="dropdown-menu min-widthAuto" aria-labelledby="dropdownMenuButton1">
+                                        <li><a target="_blank" class="dropdown-item fs20 fab fa-facebook-square" href="https://www.facebook.com/officialNCRB/"></a></li>
+                                        <li><a target="_blank" class="dropdown-item fs20 fab fa-twitter-square" href="https://twitter.com/NCRBHQ"></a></li>
+                                    </ul>
+                                </div>
+                                <div class="additional-iconic-wrap d-none d-lg-flex align-items-center">
+                                    <div class="icon">
+                                       <a href="/sitemap.html"> <em class="fa fa-sitemap"></em></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="nav-only d-flex align-items-center">
+                                <a href="javascript:;" class="js-selectLanguage " data-language="en" data-slug="">English</a>
+                                <a href="javascript:;" class="js-selectLanguage lang-active" data-language="hi" data-slug="">Hindi</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>   
+    </div>
+
+    <div class="app-header__main">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="app-header__main__block">
+                        <div class="app-header__main__logo">
+                            <a href="/">
+                                <div class="app-header__main__logo-icon">
+                                    <img src="https://www.ncrb.gov.in/static/dist/images/icons/ncrb-logo.png" class="img-fluid" />
+                                </div>
+                                <div class="app-header__main__logo-text">
+                                    <span>राष्ट्रीय अपराध रिकॉर्ड ब्यूरो</span>
+                                    <span class="text-uppercase text-small-logo">National Crime Records Bureau</span>
+                                    <span class="text-small">Empowering Indian Police with Information Technology</span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="app-header__main__info d-none d-md-flex">
+                            <div class="d-none d-lg-flex desktop_searchWrapper">
+                                <div class="generic-linkView">
+                                                                            <ul><li><a href="https://www.ncrb.gov.in/citizen-charter.html" target="">सिटिजन चार्टर</a></li><li><a href="https://www.ncrb.gov.in/contact-us.html" target="">हमसे संपर्क करें</a></li><li><a href="https://www.ncrb.gov.in/feedback.html" target="">फीडबैक</a></li></ul>                                                                    </div>
+                                <div class="search-form d-none">
+                                    <form>
+                                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                        <button class="btn" type="submit">
+                                            <em class="fa fa-search"></em>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="emblem-icon">
+                                <img src="https://www.ncrb.gov.in/static/dist/images/icons/indian_emblem.png" alt="emblem" class="img-fluid" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-navigation app-navigation-xs">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="app-navigation__resp">
+                    <div class="resp-link">
+                        <div class="dropdown">
+                            <button class="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://www.ncrb.gov.in/static/dist/images/icons/resp-ico-accessibility.png" alt="icon" class="img-fluid" />
+                            </button>
+                            <ul class="dropdown-menu min-widthAuto" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item js-fontIncrease" href="#">T+</a></li>
+                                <li><a class="dropdown-item js-fontDefault" href="#">T</a></li>
+                                <li><a class="dropdown-item js-fontDecrease" href="#">T-</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://www.ncrb.gov.in/static/dist/images/icons/ico-social.png" alt="icon" class="img-fluid" />
+                            </button>
+                            <ul class="dropdown-menu min-widthAuto" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item fs20 fab fa-facebook-square" href="https://www.facebook.com/officialNCRB/"></a></li>
+                                <li><a class="dropdown-item fs20 fab fa-twitter-square" href="https://twitter.com/NCRBHQ"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="resp-link">
+                        <div class="resp-search">
+                            <a class="resp-link__item js-respSearch" href="javascript:;">
+                                <em class="fa fa-search"></em>
+                            </a>
+                            <div class="search-form">
+                                <form method="get" action="/index">
+                                    <input class="form-control me-2" type="search" placeholder="Search" name="search" aria-label="Search">
+                                    <button class="btn btn-outline-success" type="submit">
+                                        <em class="fa fa-search"></em>
+                                    </button>
+                                <input type="hidden" name="__ncforminfo" value="SdrrGBu_MrKwy7Pk1mfK3ScRKEzSeIYVI0GO83t-l_KaogKu1ptuRSLlgm4bM8vwW9PIkBR6prHqX_uVBE7Q7adbRt9p7wSQ"/></form>
+                            </div>
+                        </div>
+                        <a class="resp-link__item" href="/">
+                            <em class="fa fa-user"></em>
+                        </a>
+                        <a class="resp-link__item js-respMenu" href="javascript:;">
+                            <em class="fa fa-bars"></em>
+                        </a>
+                    </div>
+                </div>
+                <div class="app-navigation__main">
+                    
+    <ul class="menuWrap js-navContainer"><li class="app-navigation__list">
+          <a class="app-navigation__item" href="/">होम</a>
+      </li><li class="app-navigation__list dropdown"><a href="javascript:;" class="app-navigation__item js-parentDropdown"><span class="app-navigation__item-text">हमारे बारे में</span><span class="app-navigation__item-icon fa fa-plus"></span></a><ul class="app-navigation__grid"><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/origin.html" target="" class="app-navigation__item">रचना</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/activities.html" target="" class="app-navigation__item">कार्यकलाप</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/organisation.html" target="" class="app-navigation__item">संगठन एवं इसकी विस्तृत रुपरेखा</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/ncrb-news-letter.html" target="" class="app-navigation__item">समाचार पत्रिका</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/directors-desk.html" target="" class="app-navigation__item">निदेशक संदेश</a></li><li class="app-navigation__list dropdown"><a href="javascript:;" class="app-navigation__item js-parentDropdown"><span class="app-navigation__item-text">पुरस्कार और मान्यता</span><span class="app-navigation__item-icon fa fa-plus"></span></a><ul class="app-navigation__grid"><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/honour-awards.html" target="" class="app-navigation__item">सम्मान तथा पुरस्कार</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/digital-india-awards.html" target="" class="app-navigation__item">डिजिटल इंडिया अवार्ड</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/post/photo-gallery/ficci-smart-policing-award-2018" target="_blank" class="app-navigation__item">एफआईसीसीआई स्मार्ट पोलिसिंग अवार्ड 2018</a></li></ul></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/whos-who.html" target="" class="app-navigation__item">कौन क्या है</a></li></ul></li><li class="app-navigation__list dropdown"><a href="javascript:;" class="app-navigation__item js-parentDropdown"><span class="app-navigation__item-text">विभाग</span><span class="app-navigation__item-icon fa fa-plus"></span></a><ul class="app-navigation__grid"><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/central-finger-print-bureau-cfpb.html" target="" class="app-navigation__item">केंद्रीय अंगुली छाप ब्यूरो</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/crime-and-criminal-tracking-network-systems-cctns.html" target="" class="app-navigation__item">अपराध एवं अपराधी ट्रैकिंग नेटवर्क और सिस्टम</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/statistical-branch.html" target="" class="app-navigation__item">सांख्यिकी</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/data-centre-technical-branch-dct.html" target="" class="app-navigation__item">डी.सी.टी. शाखा</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/training-branch.html" target="" class="app-navigation__item">प्रशिक्षण</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/pmpb-branch.html" target="" class="app-navigation__item">PMPB शाखा</a></li></ul></li><li class="app-navigation__list dropdown"><a href="javascript:;" class="app-navigation__item js-parentDropdown"><span class="app-navigation__item-text">प्रकाशन</span><span class="app-navigation__item-icon fa fa-plus"></span></a><ul class="app-navigation__grid"><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/crime-in-india.html" target="" class="app-navigation__item">भारत में अपराध</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/accidental-deaths-suicides-in-india-adsi.html" target="" class="app-navigation__item">भारत में आकस्मिक मौतें एवं आत्महत्याएँ</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/prison-statistics-india.html" target="" class="app-navigation__item">कारागार सांख्यिकी</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/finger-prints-in-india.html" target="" class="app-navigation__item">भारत में अंगुली चिन्ह</a></li></ul></li><li class="app-navigation__list dropdown"><a href="javascript:;" class="app-navigation__item js-parentDropdown"><span class="app-navigation__item-text">नागरिक सेवाएं</span><span class="app-navigation__item-icon fa fa-plus"></span></a><ul class="app-navigation__grid"><li class="app-navigation__list "><a href="https://www.digitalpolicecitizenservices.gov.in/centercitizen/login.htm" target="_blank" class="app-navigation__item">केंद्रीय नागरिक सेवाएं</a></li><li class="app-navigation__list "><a href="https://cytrain.ncrb.gov.in/" target="_blank" class="app-navigation__item">राष्ट्रीय साइबर प्रशिक्षण केंद्र</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/fake-currency-notes-information-system.html" target="" class="app-navigation__item">नकली मुद्रा प्रणाली</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/citizen-charter.html" target="" class="app-navigation__item">सिटिजन चार्टर</a></li></ul></li><li class="app-navigation__list dropdown"><a href="javascript:;" class="app-navigation__item js-parentDropdown"><span class="app-navigation__item-text">अधिसूचना</span><span class="app-navigation__item-icon fa fa-plus"></span></a><ul class="app-navigation__grid"><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/tenders.html" target="" class="app-navigation__item">निविदाएं</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/vacancy.html" target="" class="app-navigation__item">रिक्तियाँ</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/uploads/nationalcrimerecordsbureau/custom/1703246581Book.pdf" target="_blank" class="app-navigation__item">एनसीआरबी जर्नल</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/circulars.html" target="" class="app-navigation__item">परिपत्र</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/advisories.html" target="" class="app-navigation__item">एडवाइजरीस</a></li></ul></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/uploads/SankalanPortal/Index.html" target="_blank" class="app-navigation__item">नए आपराधिक कानून</a></li><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/rti.html" target="" class="app-navigation__item">सूचना का अधिकार</a></li><li class="app-navigation__list dropdown"><a href="javascript:;" class="app-navigation__item js-parentDropdown"><span class="app-navigation__item-text">नोडल अधिकारी अनुभाग</span><span class="app-navigation__item-icon fa fa-plus"></span></a><ul class="app-navigation__grid"><li class="app-navigation__list "><a href="https://www.ncrb.gov.in/nodal/auth/login" target="_blank" class="app-navigation__item">सीसीटीएनएस नोडल अधिकारी अनुभाग</a></li></ul></li></ul>
+                    <div class="resp-search">
+                        <a class="resp-link__item js-respSearch" href="javascript:;">
+                            <em class="fa fa-search"></em>
+                        </a>
+                        <div class="search-form">
+                            <form method="get" action="/search/index">
+                                <input class="form-control me-2" type="search" placeholder="Search" name="search" aria-label="Search">
+                                <button class="btn btn-outline-success" type="submit">
+                                    <em class="fa fa-search"></em>
+                                </button>
+                            <input type="hidden" name="__ncforminfo" value="SdrrGBu_MrKwy7Pk1mfK3ScRKEzSeIYVZXD0I8t0IUy_qK_d-FqSzDFXEddhlXMjKdlA5GLpfR7zTdOCMUL_x_mxm99w7gs9"/></form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="responsive-standalone"></div>
+    <div class="responsive-standalone-overlay js-respMenuClose"></div>
+</div>
+</header>
+        <div class="body-content" id="main-content"><div class="slidersection">    <div class="c-homeslider c-homeslider-xs">
+        <div class="owl-carousel owl-theme js-homeOwl-carousel">
+                                                                        <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/2022/May/20/1653043572_PM_Banner20225.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/2inc-day-2025-22.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/3inc-day-2025-2-final.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/4inc-day-2025-2.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/inc-day-2025-41.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/inc-day-2025-42.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/inc-day-2025-43.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/inc-day-2025-5.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/inc-day-2025-6.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/inc-day-2025-7.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/d-30-2025-01.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/d-30-2025-5.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/d-30-2025-1.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/d-30-2025-2.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/d-30-2025-21.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/d-30-2025-3.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/d-30-2025-55.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/d-30-2025-4.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/d-30-2025-7.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/d-30-2025-8.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/id-2025-5.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/id-2025-2.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/id-2025-3.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/id-2025-4.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/id-2025-51.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/hm-2024-1.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/hm-2024-2.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/hm-2024-3.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/hm-2024-4.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/hm-2024-5.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/hm-2024-6.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/hm-2024-7.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/hm-2024-8.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/hm-2024-9.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/vaw-2024.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/vaw-2024-33.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/vaw-2024-22.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/vaw-2024-3.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                                                                                <div class="item c-homeslider_item">
+                            <figure><img src="https://www.ncrb.gov.in/uploads/files/vaw-2024-2.jpg" alt="img" class="img-fluid" /></figure>
+                                                    </div>
+                                                            </div>
+    </div>
+</div><div class="c-otherhomeimg c-otherhomeimg-xs"><div class="container"><div class="row"><div class="col-lg-12"><div class="c-otherhomeimg__imgwrap">&nbsp;</div></div></div></div></div><div><div class="container"><div class="row"><div class="col-lg-7"><div class="c-homenotification c-homenotification-xs p-2"><div class="nav nav-tabs c-tabs design1" id="nav-tab"><a class="nav-link active" data-bs-target="#nav-news" data-bs-toggle="tab" id="nav-news-tab"><span class="content">समाचार और कार्यक्रम</span> </a><a class="nav-link" data-bs-target="#nav-tender" data-bs-toggle="tab" id="nav-tender-tab"><span class="content">निविदाएं</span></a></div><div class="tab-content" id="nav-tabContent"><div class="tab-pane fade show active bg-white p-4 pb-5" id="nav-news">  <p>कोई रिकॉर्ड नहीं मिला. </p>
+ <a class="viewall u-viewlinkAll" href="news">पूरा पढ़ें</a></div><div class="tab-pane fade bg-white p-4 pb-5" id="nav-tender">  <p class="js-notender text-center">कोई सक्रिय निविदा नहीं।. आप कृपया समाप्त निविदाओं के लिए <a href="/tenders?data=archived" class="themecolor"><strong>संग्रह अनुभाग </strong></a>पर जा सकते हैं।</strong></p>
+ <a class="viewall u-viewlinkAll" href="tenders">पूरा पढ़ें</a></div></div></div></div><div class="col-lg-5"><div class="c-messagewrap c-messagewrap-xs c-messageorigin"><h2 class="head">निदेशक का <span>संदेश</span></h2><div class="c-messagewrap__contentwrap"><div class="c-messagewrap__contentwrap-content w-100 p-0"><p><img class="lt-img" src="/uploads/nationalcrimerecordsbureau/page/1678954644directors-desk-img.jpg" alt="">राष्ट्रीय अपराध रिकॉर्ड ब्यूरो की स्थापना 1986 में अपराध और अपराधियों की सूचना के संग्रह के रूप में टंडन समिति की राष्ट्रीय पुलिस कमीशन (1977-1981) तथा गृह मंत्रालय की टॉस्क फोर्स (1985) को दी गई सिफारिशों के आधार पर की गई थी</p><p>जिससे कि खोजकर्ताओं को अपराध एवं अपराधियों से जो़ड़ने में सहायता मिल सके। तदनुसार, वर्ष 2009 में राष्ट्रीय अपराध रिकॉर्ड ब्यूरो को अपराध एवं अपराधी ट्रैकिंग नेटवर्क &amp; सिस्टम (सीसीटीएनएस) परियोजना की देख-रेख, समन्वय तथा अमल में लाने</p><p><a class="link" href="directors-desk">पूरा संदेश पढ़ें</a></p></div></div></div></div></div></div></div><div class="feature_slider mt-4"><div class="container"><div class="row"><div class="col-lg-9"><div class="row"><div class="col-lg-5"><div class="Whatwedo_section"><h5 class="head mb-3">कार्यकलाप</h5><div class="js-featureslider owl-carousel owl-theme featuresection_slider"><div class="item"><div class="card card_feature p-3 mb-4"><a class="gallery-link" href="crime-and-criminal-tracking-network-systems-cctns"><img class="card-img w-auto h-80 mx-auto img-fluid" src="/uploads/2022/May/20/1653044356_Computer.png" alt="Computer &amp; System"><span class="mt-2 feature-title">कंप्यूटर एवं सिस्टम</span></a></div></div><div class="item"><div class="card card_feature p-3 mb-4"><a class="gallery-link" href="public-services"><img class="card-img w-auto h-80 mx-auto img-fluid" src="/uploads/2022/May/20/1653044356_Crime-Records.png" alt="Crime Records"><span class="mt-2 feature-title">जन सेवाएं</span></a></div></div><div class="item"><div class="card card_feature p-3 mb-4"><a class="gallery-link" href="central-finger-print-bureau-cfpb"><img class="card-img w-auto h-80 mx-auto img-fluid" src="/uploads/2022/May/20/1653044355_fingerprints.png" alt="CFPB"><span class="mt-2 feature-title">केंद्रीय अंगुली छाप ब्यूरो</span></a></div></div><div class="item"><div class="card card_feature p-3 mb-4"><a class="gallery-link" href="training-branch"><img class="card-img w-auto h-80 mx-auto img-fluid" src="/uploads/2022/May/20/1653044355_Training.png" alt="Training"><span class="m-2 feature-title">प्रशिक्षण</span></a></div></div></div></div></div><div class="col-lg-1">&nbsp;</div><div class="col-lg-5"><div class="Whatwedo_section"><h5 class="head mb-3">एप्लीकेशन</h5><div class="js-featureslider owl-carousel owl-theme featuresection_slider"><div class="item"><div class="card card_feature p-3 mb-4"><a class="gallery-link" href="fake-currency-notes-information-system"><img class="card-img w-auto h-80 mx-auto img-fluid" src="/uploads/2022/May/20/1653044357_Fake-Indian-Currency.png" alt="Fake Currency System"><span class="mt-2 feature-title">नकली मुद्रा प्रणाली</span></a></div></div></div></div></div></div></div><div class="col-lg-3"><div class="Whatwedo_section gallery_section"><nav><div class="nav nav-tabs c-tabs design1" id="nav-tab"><a class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-photo" id="nav-photo-gallery"><span class="content">फोटो</span></a> <a class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-video" id="nav-video-gallery"><span class="content">वीडियो</span></a></div></nav><div class="bg-white gallery_sectiontab"><div class="tab-content"><div class="tab-pane fade show active bg-white" id="nav-photo"><div class="owl-carousel owl-theme js-galleryslider">
+                              <div class="item">
+            <div class="card card_feature ">
+              <a class="imglink" href="https://www.ncrb.gov.in/uploads/2022/May/23/1653304931_IMG_1-U.jpg" data-fancybox="group845">
+                <img src="https://www.ncrb.gov.in/uploads/2022/May/23/1653304931_IMG_1-U.jpg" class="u-img"></a>
+            </div>
+          </div>
+
+                  <div class="item">
+            <div class="card card_feature ">
+              <a class="imglink" href="https://www.ncrb.gov.in/uploads/2022/May/23/1653304931_IMG_2-U.jpg" data-fancybox="group845">
+                <img src="https://www.ncrb.gov.in/uploads/2022/May/23/1653304931_IMG_2-U.jpg" class="u-img"></a>
+            </div>
+          </div>
+
+                  <div class="item">
+            <div class="card card_feature ">
+              <a class="imglink" href="https://www.ncrb.gov.in/uploads/2022/May/23/1653304932_IMG_3-U.jpg" data-fancybox="group845">
+                <img src="https://www.ncrb.gov.in/uploads/2022/May/23/1653304932_IMG_3-U.jpg" class="u-img"></a>
+            </div>
+          </div>
+
+                  <div class="item">
+            <div class="card card_feature ">
+              <a class="imglink" href="https://www.ncrb.gov.in/uploads/2022/May/23/1653304932_IMG_4-U.jpg" data-fancybox="group845">
+                <img src="https://www.ncrb.gov.in/uploads/2022/May/23/1653304932_IMG_4-U.jpg" class="u-img"></a>
+            </div>
+          </div>
+
+                    </div> <a class="viewall u-viewlinkAll" href="photo-gallery">View All&nbsp;</a></div><div class="tab-pane fade bg-white" id="nav-video">
+<div class="owl-carousel owl-theme js-galleryslider">
+                              <div class="item">
+            <div class="card card_feature ">
+              <a class="imglink" href="https://www.ncrb.gov.in/uploads/nationalcrimerecordsbureau/custom/1684916724ncrb15dec20.mp4" data-fancybox="group1">
+                <img src="https://www.ncrb.gov.in/uploads/files/1684917031video-1.jpg" class="u-img" />
+              </a>
+            </div>
+          </div>
+                                          <div class="item">
+            <div class="card card_feature ">
+              <a class="imglink" href="https://www.ncrb.gov.in/uploads/nationalcrimerecordsbureau/custom/1684917334ncrb16dec20.mp4" data-fancybox="group1">
+                <img src="https://www.ncrb.gov.in/uploads/files/icjs.jpg" class="u-img" />
+              </a>
+            </div>
+          </div>
+                                          <div class="item">
+            <div class="card card_feature ">
+              <a class="imglink" href="https://www.ncrb.gov.in/uploads/nationalcrimerecordsbureau/custom/1684917447mha13october2020.mp4" data-fancybox="group1">
+                <img src="https://www.ncrb.gov.in/uploads/files/nafis.jpg" class="u-img" />
+              </a>
+            </div>
+          </div>
+                                          <div class="item">
+            <div class="card card_feature ">
+              <a class="imglink" href="https://www.ncrb.gov.in/uploads/nationalcrimerecordsbureau/custom/1684917498pmenglish.mp4" data-fancybox="group1">
+                <img src="https://www.ncrb.gov.in/uploads/files/pmmsg1.jpg" class="u-img" />
+              </a>
+            </div>
+          </div>
+                                          <div class="item">
+            <div class="card card_feature ">
+              <a class="imglink" href="https://www.ncrb.gov.in/uploads/2022/May/23/1653313621_Short_film_on_NCRB_eng.mp4" data-fancybox="group1">
+                <img src="https://www.ncrb.gov.in/static/dist/images/pages/gallery/video/shortfilm-ncrb.jpg" class="u-img" />
+              </a>
+            </div>
+          </div>
+                    </div><a class="viewall u-viewlinkAll" href="video-gallery"> View All&nbsp;</a></div></div></div></div></div></div></div></div></div>
+        <div class="container-fluid"><div class="row"><div class="col-12 p-0"><div class="app-footer__map"><div class="app-footer__map-iframe"><figure class="media"><oembed url="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d28036.237745130315!2d77.133636!3d28.553852000000003!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1c4468805b7b%3A0x11cfb7fb366656c6!2sNational%20Crime%20Records%20Bureau!5e0!3m2!1sen!2sus!4v1684494750191!5m2!1sen!2sus"></oembed></figure></div><div class="app-footer__map-content"><div>राष्ट्रीय राजमार्ग - ४८, महिपालपुर, नई दिल्ली - ११००३७.</div><div><strong>दूरभाष: </strong>(०११) २६७३५४५०</div><div><strong>फैक्स:</strong> (०११) २६७८२२५७</div><div><strong>ईमेल: </strong>dct[at]ncrb[dot]gov[dot]in</div></div></div></div></div></div>
+<footer class="app-footer app-footer-xs">
+
+    <div class="app-footer__main">
+        <div class="container">
+            <div class="row">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-2 footer-links">
+        
+        <ul><li><a  class="link" href="https://ecourts.gov.in/ecourts_home/" target="_blank">ई-कोर्ट</a></li><li><a  class="link" href="https://eprisons.nic.in/Public/Home" target="_blank">ई-कारागार</a></li><li><a  class="link" href="https://police.gov.in/" target="_blank">(राष्ट्र की सेवा में भारतीय पुलिस)</a></li><li><a  class="link" href="https://data.gov.in/ministrydepartment/national-crime-records-bureau-ncrb" target="_blank">डेटा पोर्टल पर एनसीआरबी</a></li><li><a  class="link" href="https://cybercrime.gov.in/" target="_blank">राष्ट्रीय साइबर अपराध रिपोर्टिंग पोर्टल</a></li></ul>
+        </div>                                                    <div class="col-12 col-sm-6 col-md-4 col-lg-2 footer-links">
+        
+        <ul><li><a  class="link" href="https://www.ncrb.gov.in/uploads/nationalcrimerecordsbureau/custom/tester/1695964837getlatlng18012017.zip" target="_blank">एंड्रॉयड आधारित 'गेट अक्षांश देशांतर' ए. पी.के.</a></li><li><a  class="link" href="https://www.digitalpolicecitizenservices.gov.in/centercitizen/login.htm" target="_blank">केंद्रीय नागरिक सेवाएं</a></li><li><a  class="link" href="https://cytrain.ncrb.gov.in/" target="_blank">एनसीटीसी</a></li><li><a  class="link" href="https://digitalpolice.gov.in/" target="_blank">डिजिटल पुलिस</a></li><li><a  class="link" href="https://www.mha.gov.in/" target="_blank">गृह मंत्रालय</a></li><li><a  class="link" href="https://nationalpolicememorial.gov.in/npm/" target="_blank">राष्ट्रीय पुलिस स्मारक</a></li></ul>
+        </div>                                                    <div class="col-12 col-sm-6 col-md-4 col-lg-2 footer-links">
+        
+        <ul><li><a  class="link" href="https://www.ncrb.gov.in/uploads/files/NCRBTrainingCalendar2025-2026.pdf" target="_blank">वार्षिक प्रशिक्षण कैलेंडर 2025-2026</a></li><li><a  class="link" href="https://www.ncrb.gov.in/uploads/nationalcrimerecordsbureau/custom/1691130450Hackathon-Result-2023.pdf" target="_blank">हैकाथॉन परिणाम - 2023</a></li><li><a  class="link" href="https://www.ncrb.gov.in/uploads/2022/May/19/1652958572_InternshipPolicy2020.pdf" target="_blank">एनसीआरबी इंटर्नशिप स्कीम</a></li><li><a  class="link" href="https://www.ncrb.gov.in/fake-currency-notes-information-system.html" target="">नकली मुद्रा प्रणाली</a></li><li><a  class="link" href="https://www.ncrb.gov.in/downloads.html" target="">डाउनलोड</a></li><li><a  class="link" href="https://www.ncrb.gov.in/uploads/nationalcrimerecordsbureau/custom/tester/1695543709ICC-Women.pdf" target="_blank">आंतरिक शिकायत समिति (आईसीसी) - महिला</a></li></ul>
+        </div>                                                    <div class="col-12 col-sm-6 col-md-4 col-lg-2 footer-links">
+        
+        <ul><li><a  class="link" href="https://www.ncrb.gov.in/uploads/files/Newsletter-Dec2025.pdf" target="_blank">संवाद पत्र अक्टूबर-दिसंबर 2025</a></li><li><a  class="link" href="https://www.ncrb.gov.in/digital-india-awards.html" target="">डिजिटल इंडिया अवार्ड</a></li><li><a  class="link" href="https://www.ncrb.gov.in/aipdm.html" target="">ए आई पी डी एम</a></li><li><a  class="link" href="https://www.ncrb.gov.in/news.html" target="">समाचार और कार्यक्रम</a></li><li><a  class="link" href="https://www.ncrb.gov.in/uploads/2022/May/23/1653313621_Short_film_on_NCRB_eng.mp4" target="_blank">सीसीटीएनएस पर लघु फिल्म</a></li></ul>
+        </div>                                                    <div class="col-12 col-sm-6 col-md-4 col-lg-2 footer-links">
+        
+        <ul><li><a  class="link" href="https://www.ncrb.gov.in/uploads/files/ANNEXUREA-FINALRESULT.pdf" target="_blank">ए आई बी ई परिणाम - 2025</a></li><li><a  class="link" href="https://www.ncrb.gov.in/finger-prints-in-india-year-wise.html?year=2023&keyword=" target="_blank">भारत में अंगुली चिन्ह-2023</a></li><li><a  class="link" href="https://www.ncrb.gov.in/aibe.html" target="">ए आई बी ई</a></li><li><a  class="link" href="https://www.ncrb.gov.in/uploads/files/flyers-26022024.zip" target="_blank">Flyers on New Criminal Laws</a></li></ul>
+        </div>                                                    <div class="col-12 col-sm-6 col-md-4 col-lg-2 footer-links">
+        
+        <ul><li><a  class="link" href="https://www.ncrb.gov.in/rti.html" target="">सूचना का अधिकार</a></li><li><a  class="link" href="https://www.ncrb.gov.in/circulars.html" target="">परिपत्र</a></li><li><a  class="link" href="https://www.ncrb.gov.in/whos-who.html" target="">कौन क्या है</a></li><li><a  class="link" href="https://www.ncrb.gov.in/feedback.html" target="">फीडबैक</a></li><li><a  class="link" href="https://www.ncrb.gov.in/state-policecpo-links.html" target="">राज्य पुलिस / सीपीओ लिंक</a></li><li><a  class="link" href="https://www.ncrb.gov.in/recruitment-rules.html" target="">भर्ती नियम</a></li></ul>
+        </div>                            </div>
+            <div class="row mt-0 mt-md-4">
+                <div class="col-12">
+                                            <div class="app-footer__basicLinks">
+        <ul><li><a  class="link" href="https://www.ncrb.gov.in/screen-reader-access.html" target="">स्क्रीन रीडर एक्सेस</a></li><li><a  class="link" href="https://www.ncrb.gov.in/accessibility-statement.html" target="">अभिगम्यता-वक्तव्य</a></li><li><a  class="link" href="https://www.ncrb.gov.in/quality-policies-objectives.html" target="">गुणवत्ता नीति एवं लक्ष्य</a></li><li><a  class="link" href="https://www.ncrb.gov.in/sitemap.html" target="">साइटमैप</a></li><li><a  class="link" href="https://www.ncrb.gov.in/website-policies.html" target="">वेबसाइट नीतियां</a></li><li><a  class="link" href="https://www.ncrb.gov.in/help.html" target="">हेल्प</a></li></ul>
+        </div>                                    </div>
+            </div>
+            <div class="row mt-4">
+                
+
+    <div class="col-12">
+        <div class="js-sponsorsSlider owl-carousel owl-theme generic_productSlide">
+                                                <div class="item">
+                        <div class="card p-3 mb-4">
+                            <a href="https://data.gov.in/" target="_blank" class="productslider-link">
+                                <img alt="Data Gov" class="card-img w-auto h-100 mx-auto img-fluid" src="https://www.ncrb.gov.in/uploads/2022/May/20/1653040758_datagov.jpg" title="Data Gov" /></a>
+                        </div>
+                    </div>
+                
+                                                <div class="item">
+                        <div class="card p-3 mb-4">
+                            <a href="https://evisitors.nic.in/" target="_blank" class="productslider-link">
+                                <img alt="My Visit" class="card-img w-auto h-100 mx-auto img-fluid" src="https://www.ncrb.gov.in/uploads/2022/May/20/1653040737_myvisit.jpg" title="My Visit" /></a>
+                        </div>
+                    </div>
+                
+                                                <div class="item">
+                        <div class="card p-3 mb-4">
+                            <a href="https://www.india.gov.in/" target="_blank" class="productslider-link">
+                                <img alt="India Gov In" class="card-img w-auto h-100 mx-auto img-fluid" src="https://www.ncrb.gov.in/uploads/2022/May/20/1653040712_indiagov.jpg" title="India Gov In" /></a>
+                        </div>
+                    </div>
+                
+                                                <div class="item">
+                        <div class="card p-3 mb-4">
+                            <a href="http://dial.gov.in/" target="_blank" class="productslider-link">
+                                <img alt="Dial Gov" class="card-img w-auto h-100 mx-auto img-fluid" src="https://www.ncrb.gov.in/uploads/2022/May/20/1653040689_dial.jpg" title="Dial Gov" /></a>
+                        </div>
+                    </div>
+                
+                                                <div class="item">
+                        <div class="card p-3 mb-4">
+                            <a href="https://www.mygov.in/" target="_blank" class="productslider-link">
+                                <img alt="My Govt" class="card-img w-auto h-100 mx-auto img-fluid" src="https://www.ncrb.gov.in/uploads/2022/May/20/1653040669_mygov.jpg" title="My Govt" /></a>
+                        </div>
+                    </div>
+                
+                                                <div class="item">
+                        <div class="card p-3 mb-4">
+                            <a href="https://rti.gov.in/" target="_blank" class="productslider-link">
+                                <img alt="Right To Information" class="card-img w-auto h-100 mx-auto img-fluid" src="https://www.ncrb.gov.in/uploads/2022/May/20/1653040646_soochna.jpg" title="Right To Information" /></a>
+                        </div>
+                    </div>
+                
+                                                <div class="item">
+                        <div class="card p-3 mb-4">
+                            <a href="https://www.digitalindia.gov.in/" target="_blank" class="productslider-link">
+                                <img alt="Digital India" class="card-img w-auto h-100 mx-auto img-fluid" src="https://www.ncrb.gov.in/uploads/2022/May/20/1653040589_digital.jpg" title="Digital India" /></a>
+                        </div>
+                    </div>
+                
+            
+
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+           <div class="app-footer__bottom-above">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="app-footer__bottom-above-box">
+                            <div class="content-section">वेबसाइट हिट: <strong>11084599</strong></div>
+                            <div class="content-section"></div>
+                            <div class="content-section">अपडेट ऑन: <strong>23/02/2026</strong></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    <div class="app-footer__bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="app-footer__bottom-main">
+                        <div class="copyright">कॉपीराइट © 2018. All Rights Reserved</div>
+                        <div class="credits">सामग्री प्रबंधन प्रणाली <strong>राष्ट्रीय अपराध रिकॉर्ड ब्यूरो</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<a href="javascript:;" class="back-to-top d-flex align-items-center justify-content-center active"><em class="fas fa-arrow-up"></em></a>    </div>
+      <script type="text/javascript" src="https://www.ncrb.gov.in/static/dist/deploy/app.min.js?rel=20231028004"></script>
+
+<script>
+
+  var baseHttpPath = 'https://www.ncrb.gov.in';
+  var staticPath = 'https://www.ncrb.gov.in/static';
+  function google_map_url(){
+
+
+    var allMediaList = document.querySelectorAll("figure");
+    var allMediaListLen = allMediaList !=null ? allMediaList.length : 0;
+    for(i=0; i<allMediaListLen; i++) {
+      // Use a regular expression to find the oembed element in the HTML string
+      const oembedRegex = /<oembed[^>]*>/g;
+      const oembedMatch = allMediaList[i].innerHTML.match(oembedRegex);
+
+        // If an oembed element was found, convert it to an iframe element
+        if (oembedMatch) {
+          const oembedUrl = oembedMatch[0].match(/url="([^"]*)"/)[1];
+          googleRejax = /(https|http):\/\/(www\.|)google\.[a-z]+\/maps/;
+          if(oembedUrl.match(googleRejax)) {
+            const iframeElement = `<iframe src="${oembedUrl}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen height="400px" width="100%"></iframe>`;
+            allMediaList[i].innerHTML = allMediaList[i].innerHTML.replace(oembedRegex, iframeElement);
+          }
+        }
+    }
+
+      // var html = value = document.getElementById("figure").className;
+      
+    
+    
+      // document.body.innerHTML = html;
+  };
+    
+  google_map_url();
+</script>
+    
+    
+   <script src="https://www.ncrb.gov.in/static/dist/js-vendors/jquery/jquery-3.7.1.min.js"></script>
+   
+    <script src="https://www.ncrb.gov.in/static/dist/js-vendors/bootstrap/bootstrap.bundle.min.js"></script>
+    
+    </body>
+
+</html>
